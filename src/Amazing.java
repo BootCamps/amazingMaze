@@ -20,7 +20,8 @@ public class Amazing {
 	private static boolean z;
 	private static int entryPoint;
 	private static int currentPosition;
-	static Maze maze;	
+	static Maze maze;
+
 	public static void main(String[] args) {
 		generateMaze(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 		System.out.println(Maze.result);
@@ -31,259 +32,233 @@ public class Amazing {
 	}
 
 	public static void generateMaze(int horizontal, int vertical) {
-		maze=new Maze();
+		maze = new Maze();
 		maze.drawHeader();
 		if (maze.isInvalidMazeDimension(horizontal, vertical))
 			return;
-
 		initializeMaze(horizontal, vertical);
+		maze.drawMaze(horizontal, vertical, verticalArrays);
+	}
 
-		while (target != -1) {
-			switch (target) {
-			case 280:
-				if (isAVisitedPosition(xCoordinate - 1, yCoordinate))
-					target = 600;
-				else {
-					if (yCoordinate - 1 == 0)
-						target = 430;
-					else
-						target = 300;
-				}
-				continue;
-			case 300:
-				if (isAVisitedPosition(xCoordinate, yCoordinate - 1))
-					target = 430;
-				else {
-					if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate))
-							target = 350;
-					else
-							target = 330;
-				}
-				continue;
-			case 330:
-				entryPoint = generateRandom(3);
-				if (entryPoint == 1)
-					target = 940;
-				else if (entryPoint == 2)
-					mayMoveUp(horizontal, vertical);
-				else if (entryPoint == 3)
-					moveRightAndMarkPosition(horizontal, vertical);
-				else
-					target = 350;
-				continue;
-			case 350:
-				if ((!isWithinBottomEdge(vertical) && isZTrue()) || isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1))
-						target = 410;
-				else if(isWithinBottomEdge(vertical))
-						target = 390;
-				else{
-					assignQ(true);
-					target = 390;
-				}
-				continue;
-			case 390:
-				entryPoint = generateRandom(3);
-				if (entryPoint == 1)
-					target = 940;
-				else if (entryPoint == 2)
-					mayMoveUp(horizontal, vertical);
-				else if (entryPoint == 3)
-					target = 1090;
-				else
-					target = 410;
-				continue;
-			case 410:
-				entryPoint = generateRandom(2);
-				if (entryPoint == 1)
-					target = 940;
-				else if (entryPoint == 2)
-					mayMoveUp(horizontal, vertical);
-				else
-					target = 430;
-				continue;
-			case 430:
-				if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate))
-					target = 530;
-				else if (isWithinBottomEdge(vertical))
-					target = 480;
-				else{
-					if (isZTrue())
-						target = 510;
-					else
-						target = 470;
-				}
-				continue;
-			case 470:
+	private static void case510Method(int horizontal, int vertical) {
+		entryPoint = generateRandom(2);
+		if (entryPoint == 1)
+			case940Movement(horizontal, vertical);
+		else if (entryPoint == 2)
+			moveRightAndMarkPosition(horizontal, vertical);
+		else
+			case530Method(horizontal, vertical);
+	}
+
+	private static void case600Method(int horizontal, int vertical) {
+		if (yCoordinate - 1 == 0 || isAVisitedPosition(xCoordinate, yCoordinate - 1)) {
+			case790Method(horizontal, vertical);
+		} else if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate))
+			case720Method(horizontal, vertical);
+		else if ((isZTrue() && !isWithinBottomEdge(vertical))
+				|| isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1))
+			mayMakeRandomCalculationForTwo(horizontal, vertical);
+		else if (isWithinBottomEdge(vertical)) {
+			mayMakeRandomCalculationForThree(horizontal, vertical);
+		} else {
+			assignQ(true);
+			mayMakeRandomCalculationForThree(horizontal, vertical);
+		}
+	}
+
+	private static void case530Method(int horizontal, int vertical) {
+		if (isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1)|| !isWithinBottomEdge(vertical) && isZTrue()) {
+			case940Movement(horizontal, vertical);
+		} else {
+			if (!isWithinBottomEdge(vertical)) {
 				assignQ(true);
-				target = 490;
-				continue;
-			case 480:
-				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
-					target = 510;
-				else
-					target = 490;
-				continue;
-			case 490:
-				entryPoint = generateRandom(3);
-				if (entryPoint == 1)
-					target = 940;
-				else if (entryPoint == 2)
-					moveRightAndMarkPosition(horizontal, vertical);
-				else if (entryPoint == 3)
-					target = 1090;
-				else
-					target = 510;
-				continue;
-			case 510:
-				entryPoint = generateRandom(2);
-				if (entryPoint == 1)
-					target = 940;
-				else if (entryPoint == 2)
-					moveRightAndMarkPosition(horizontal, vertical);
-				else
-					target = 530;
-				continue;
-			case 530:
-				if (isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1)){
-					target = 940;
-				}else if(isWithinBottomEdge(vertical)){
-					target = 570;
-				}else if (!isWithinBottomEdge(vertical) && isZTrue()){
-						target = 940;
-				}else{
-						assignQ(true);
-						target = 570;
-				}
-				continue;
-			case 570:
-				entryPoint = generateRandom(2);
-				if (entryPoint == 2)
-					target = 1090;
-				else
-					target = 940;
-				continue;
-			case 600:
-				if (yCoordinate - 1 == 0 || isAVisitedPosition(xCoordinate, yCoordinate - 1)) {
-					target = 790;
-				} else if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate))
-					target = 720;
-				else if ((isZTrue() && !isWithinBottomEdge(vertical))
-						|| isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1))
-					mayMakeRandomCalculationForTwo(horizontal, vertical);
-				else if (isWithinBottomEdge(vertical)) {
-					mayMakeRandomCalculationForThree(horizontal, vertical);
-				} else {
-					assignQ(true);
-					mayMakeRandomCalculationForThree(horizontal, vertical);
-				}
-				continue;
-			case 720:
-				if (isWithinBottomEdge(vertical))
-					target = 750;
-				else {
-					if (isZTrue())
-						mayMoveUp(horizontal, vertical);
-					else
-						target = 740;
-				}
-				continue;
-			case 740:
-				assignQ(true);
-				target = 760;
-				continue;
-			case 750:
-				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
-					mayMoveUp(horizontal, vertical);
-				else
-					target = 760;
-				continue;
-			case 760:
-				entryPoint = generateRandom(2);
-				if (entryPoint == 2)
-					target = 1090;
-				else
-					mayMoveUp(horizontal, vertical);
-				continue;
-			case 790:
-				if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate)) {
-					target = 880;
-				} else if (isWithinBottomEdge(vertical))
-					target = 840;
-				else {
-					if (isZTrue())
-						moveRightAndMarkPosition(horizontal, vertical);
-					else {
-						assignQ(true);
-						mayMoveUpAndValidate(horizontal, vertical);
-					}
-				}
-				continue;
-			case 840:
-				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
-					moveRightAndMarkPosition(horizontal, vertical);
-				else {
-					entryPoint = generateRandom(2);
-					if (entryPoint == 2)
-						target = 1090;
-					else
-						moveRightAndMarkPosition(horizontal, vertical);
-				}
-				continue;
-			case 880:
-				if (isWithinBottomEdge(vertical)){
-					if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
-						mayMakeAMove(horizontal, vertical);
-					else
-						target = 1090;
-				}else  if (isZTrue()){
-						mayMakeAMove(horizontal, vertical);
-				}else {
-					assignQ(true);
-					target = 1090;
-				}
-				continue;
-			case 940:
-				markPositionAsVisited(xCoordinate - 1, yCoordinate);
-				moveOneStep();
-				verticalArrays[xCoordinate - 1][yCoordinate] = 2;
-				moveLeft();
-				mayValidatePostMovement(horizontal, vertical);
-				continue;
-			case 1090:
-				if (q ) {
-					assignZ(true);
-					if (verticalArrays[xCoordinate][yCoordinate] == 0) {
-						verticalArrays[xCoordinate][yCoordinate] = 1;
-						assignQ(false);
-						positionAtTopLeftCorner();
-						makeAMoveIfNotVisited(horizontal, vertical);
-
-					} else {
-						verticalArrays[xCoordinate][yCoordinate] = 3;
-						assignQ(false);
-						mayMakeAMove(horizontal, vertical);
-					}
-				} else {
-					markPositionAsVisited(xCoordinate, yCoordinate + 1);
-					moveOneStep();
-					if (verticalArrays[xCoordinate][yCoordinate] == 0) {
-						verticalArrays[xCoordinate][yCoordinate] = 1;
-					} else {
-						verticalArrays[xCoordinate][yCoordinate] = 3;
-					}
-					moveDown();
-					if (isAtEndPoint(vertical, horizontal))
-						exitLoop();
-					else
-						mayValidateStartXPosition(xCoordinate);
-
-				}
-				continue;
 			}
+			entryPoint = generateRandom(2);
+			if (entryPoint == 2)
+				case1090Movement(horizontal, vertical);
+			else
+				case940Movement(horizontal, vertical);
+		}
+	}
+
+	private static void case390Method(int horizontal, int vertical) {
+		entryPoint = generateRandom(3);
+		if (entryPoint == 1)
+			case940Movement(horizontal, vertical);
+		else if (entryPoint == 2)
+			mayMoveUp(horizontal, vertical);
+		else if (entryPoint == 3)
+			case1090Movement(horizontal, vertical);
+		else
+			case410Method(horizontal, vertical);
+	}
+
+	private static void case410Method(int horizontal, int vertical) {
+		entryPoint = generateRandom(2);
+		if (entryPoint == 1)
+			case940Movement(horizontal, vertical);
+		else if (entryPoint == 2)
+			mayMoveUp(horizontal, vertical);
+		else
+			case430Method(horizontal, vertical);
+	}
+
+	private static void case280Method(int horizontal, int vertical) {
+		if (isAVisitedPosition(xCoordinate - 1, yCoordinate))
+			case600Method(horizontal, vertical);
+		else if (yCoordinate - 1 == 0 || isAVisitedPosition(xCoordinate, yCoordinate - 1))
+			case430Method(horizontal, vertical);
+		else if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate)){
+			case350Method(horizontal, vertical);
+		}else{
+			entryPoint = generateRandom(3);
+			if (entryPoint == 1)
+				case940Movement(horizontal, vertical);
+			else if (entryPoint == 2)
+				mayMoveUp(horizontal, vertical);
+			else if (entryPoint == 3)
+				moveRightAndMarkPosition(horizontal, vertical);
+			else
+				case350Method(horizontal, vertical);
+		}
+	}
+
+	private static void case350Method(int horizontal, int vertical) {
+		if ((!isWithinBottomEdge(vertical) && isZTrue())
+				|| isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1))
+							case410Method(horizontal, vertical);
+		else if (isWithinBottomEdge(vertical))
+			case390Method(horizontal, vertical);
+		else {
+			assignQ(true);
+			case390Method(horizontal, vertical);
+		}
+	}
+
+	private static void case430Method(int horizontal, int vertical) {
+		if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate))
+			case530Method(horizontal, vertical);
+		else if (isWithinBottomEdge(vertical)) {
+			if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
+				case510Method(horizontal, vertical);
+			else
+				case490Method(horizontal, vertical);
+		} else {
+			if (isZTrue())
+				case510Method(horizontal, vertical);
+			else {
+				assignQ(true);
+				case490Method(horizontal, vertical);
+			}
+		}
+	}
+
+	private static void case720Method(int horizontal, int vertical) {
+		if (isWithinBottomEdge(vertical)) {
+			if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
+				mayMoveUp(horizontal, vertical);
+			else
+				case760Method(horizontal, vertical);
+		} else {
+			if (isZTrue())
+				mayMoveUp(horizontal, vertical);
+			else {
+				assignQ(true);
+				case760Method(horizontal, vertical);
+			}
+		}
+	}
+
+	private static void case760Method(int horizontal, int vertical) {
+		entryPoint = generateRandom(2);
+		if (entryPoint == 2)
+			case1090Movement(horizontal, vertical);
+		else
+			mayMoveUp(horizontal, vertical);
+	}
+
+	private static void case790Method(int horizontal, int vertical) {
+		if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate)) {
+			if (isWithinBottomEdge(vertical)) {
+				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
+					mayMakeAMove(horizontal, vertical);
+				else
+					case1090Movement(horizontal, vertical);
+			} else if (isZTrue()) {
+				mayMakeAMove(horizontal, vertical);
+			} else {
+				assignQ(true);
+				case1090Movement(horizontal, vertical);
+			}
+		} else if (isWithinBottomEdge(vertical)) {
+			if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
+				moveRightAndMarkPosition(horizontal, vertical);
+			else {
+				entryPoint = generateRandom(2);
+				if (entryPoint == 2)
+					case1090Movement(horizontal, vertical);
+				else
+					moveRightAndMarkPosition(horizontal, vertical);
+			}
+		} else {
+			if (isZTrue())
+				moveRightAndMarkPosition(horizontal, vertical);
+			else {
+				assignQ(true);
+				mayMoveUpAndValidate(horizontal, vertical);
+			}
+		}
+	}
+
+	private static void case490Method(int horizontal, int vertical) {
+		entryPoint = generateRandom(3);
+		if (entryPoint == 1)
+			case940Movement(horizontal, vertical);
+		else if (entryPoint == 2)
+			moveRightAndMarkPosition(horizontal, vertical);
+		else if (entryPoint == 3)
+			case1090Movement(horizontal, vertical);
+		else
+			case510Method(horizontal, vertical);
+	}
+
+	private static void case940Movement(int horizontal, int vertical) {
+		markPositionAsVisited(xCoordinate - 1, yCoordinate);
+		moveOneStep();
+		verticalArrays[xCoordinate - 1][yCoordinate] = 2;
+		moveLeft();
+		mayValidatePostMovement(horizontal, vertical);
+	}
+
+	private static void case1090Movement(int horizontal, int vertical) {
+		if (q) {
+			assignZ(true);
+			if (verticalArrays[xCoordinate][yCoordinate] == 0) {
+				verticalArrays[xCoordinate][yCoordinate] = 1;
+				assignQ(false);
+				positionAtTopLeftCorner();
+				makeAMoveIfNotVisited(horizontal, vertical);
+
+			} else {
+				verticalArrays[xCoordinate][yCoordinate] = 3;
+				assignQ(false);
+				mayMakeAMove(horizontal, vertical);
+			}
+		} else {
+			markPositionAsVisited(xCoordinate, yCoordinate + 1);
+			moveOneStep();
+			if (verticalArrays[xCoordinate][yCoordinate] == 0) {
+				verticalArrays[xCoordinate][yCoordinate] = 1;
+			} else {
+				verticalArrays[xCoordinate][yCoordinate] = 3;
+			}
+			moveDown();
+			if (isAtEndPoint(vertical, horizontal))
+				exitLoop();
+			else
+				mayValidateStartXPosition(xCoordinate, horizontal, vertical);
 
 		}
-
-		maze.drawMaze(horizontal, vertical, verticalArrays);
 	}
 
 	private static void moveRightAndMarkPosition(int horizontal, int vertical) {
@@ -298,7 +273,7 @@ public class Amazing {
 		if (isAtEndPoint(horizontal, vertical))
 			exitLoop();
 		else
-			target = 600;
+			case600Method(horizontal, vertical);
 	}
 
 	private static void mayMoveUp(int horizontal, int vertical) {
@@ -307,7 +282,7 @@ public class Amazing {
 	}
 
 	private static boolean isZTrue() {
-		return z ;
+		return z;
 	}
 
 	private static void mayMoveUpAndValidate(int horizontal, int vertical) {
@@ -321,7 +296,7 @@ public class Amazing {
 		if (!isAVisitedPosition(xCoordinate, yCoordinate))
 			mayMakeAMove(horizontal, vertical);
 		else
-			mayValidateStartXPosition(xCoordinate);
+			mayValidateStartXPosition(xCoordinate, horizontal, vertical);
 	}
 
 	private static void mayMakeRandomCalculationForTwo(int horizontal, int vertical) {
@@ -331,7 +306,7 @@ public class Amazing {
 		else if (entryPoint == 2)
 			moveRightAndMarkPosition(horizontal, vertical);
 		else
-			target = 720;
+			case720Method(horizontal, vertical);
 	}
 
 	private static void mayMakeRandomCalculationForThree(int horizontal, int vertical) {
@@ -341,7 +316,7 @@ public class Amazing {
 		else if (entryPoint == 2)
 			moveRightAndMarkPosition(horizontal, vertical);
 		else if (entryPoint == 3)
-			target = 1090;
+			case1090Movement(horizontal, vertical);
 		else
 			mayMakeRandomCalculationForTwo(horizontal, vertical);
 	}
@@ -351,7 +326,7 @@ public class Amazing {
 			exitLoop();
 		else {
 			assignQ(false);
-			mayValidateStartXPosition(xCoordinate);
+			mayValidateStartXPosition(xCoordinate, horizontal, vertical);
 		}
 	}
 
@@ -380,7 +355,7 @@ public class Amazing {
 
 		xCoordinate = entryPoint;
 		yCoordinate = 1;
-		mayValidateStartXPosition(xCoordinate);
+		mayValidateStartXPosition(xCoordinate, horizontal, vertical);
 	}
 
 	private static boolean isAVisitedPosition(int xCoordinate, int yCoordinate) {
@@ -446,10 +421,10 @@ public class Amazing {
 		target = -1;
 	}
 
-	private static void mayValidateStartXPosition(int xCoordinate) {
+	private static void mayValidateStartXPosition(int xCoordinate, int horizontal, int vertical) {
 		if (xCoordinate - 1 == 0)
-			target = 600;
+			case600Method(horizontal, vertical);
 		else
-			target = 280;
+			case280Method(horizontal, vertical);
 	}
 }
