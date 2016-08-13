@@ -1,3 +1,6 @@
 ﻿/bin
 .settings
 lib
+/bin/
+.classpath
+.project
