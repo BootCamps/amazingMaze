@@ -15,7 +15,7 @@ public class Amazing {
 	static StringBuffer result = new StringBuffer();
 
 	public static void main(String[] args) {
-		drawMaze(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+		generateMaze(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 		System.out.println(result);
 	}
 
@@ -35,7 +35,7 @@ public class Amazing {
 		return (int) (count * random.nextFloat()) + 1;
 	}
 
-	public static void drawMaze(int horizontal, int vertical) {
+	public static void generateMaze(int horizontal, int vertical) {
 		clear();
 		print("Amazing - Copyright by Creative Computing, Morristown, NJ");
 		println();
@@ -62,47 +62,29 @@ public class Amazing {
 		// 200
 		int xCoordinate = entryPoint;
 		int yCoordinate = 1;
-		target = 270;
+		mayValidateStartXPosition(xCoordinate);
 
 		while (target != -1) {
 			switch (target) {
 			case 210:
-				if (xCoordinate != horizontal)
-					target = 250;
-				else
-					target = 220;
-				continue;
-			case 220:
-				if (yCoordinate != vertical)
-					target = 240;
-				else
-					target = 230;
-				continue;
-			case 230:
-				xCoordinate = 1;
-				yCoordinate = 1;
-				target = 260;
-				continue;
-			case 240:
-				xCoordinate = 1;
-				yCoordinate++;
-				target = 260;
-				continue;
-			case 250:
-				xCoordinate++;
+				if (xCoordinate != horizontal){
+					xCoordinate++;
+				}else{
+					if (yCoordinate != vertical){
+						xCoordinate = 1;
+						yCoordinate++;
+					}else{
+						xCoordinate = 1;
+						yCoordinate = 1;
+					}
+				}
 				target = 260;
 				continue;
 			case 260:
 				if (horizontalArray[xCoordinate][yCoordinate] == 0)
 					target = 210;
 				else
-					target = 270;
-				continue;
-			case 270:
-				if (xCoordinate - 1 == 0)
-					target = 600;
-				else
-					target = 280;
+					mayValidateStartXPosition(xCoordinate);
 				continue;
 			case 280:
 				if (horizontalArray[xCoordinate - 1][yCoordinate] != 0)
@@ -136,9 +118,6 @@ public class Amazing {
 				continue;
 			case 330:
 				entryPoint = generateRandom(3);
-				target = 340;
-				continue;
-			case 340:
 				if (entryPoint == 1)
 					target = 940;
 				else if (entryPoint == 2)
@@ -172,9 +151,6 @@ public class Amazing {
 				continue;
 			case 390:
 				entryPoint = generateRandom(3);
-				target = 400;
-				continue;
-			case 400:
 				if (entryPoint == 1)
 					target = 940;
 				else if (entryPoint == 2)
@@ -186,9 +162,6 @@ public class Amazing {
 				continue;
 			case 410:
 				entryPoint = generateRandom(2);
-				target = 420;
-				continue;
-			case 420:
 				if (entryPoint == 1)
 					target = 940;
 				else if (entryPoint == 2)
@@ -232,9 +205,6 @@ public class Amazing {
 				continue;
 			case 490:
 				entryPoint = generateRandom(3);
-				target = 500;
-				continue;
-			case 500:
 				if (entryPoint == 1)
 					target = 940;
 				else if (entryPoint == 2)
@@ -246,9 +216,6 @@ public class Amazing {
 				continue;
 			case 510:
 				entryPoint = generateRandom(2);
-				target = 520;
-				continue;
-			case 520:
 				if (entryPoint == 1)
 					target = 940;
 				else if (entryPoint == 2)
@@ -280,9 +247,6 @@ public class Amazing {
 				continue;
 			case 570:
 				entryPoint = generateRandom(2);
-				target = 580;
-				continue;
-			case 580:
 				if (entryPoint == 1)
 					target = 940;
 				else if (entryPoint == 2)
@@ -305,14 +269,12 @@ public class Amazing {
 			case 620:
 				if (xCoordinate == horizontal)
 					target = 720;
-				else
-					target = 630;
-				continue;
-			case 630:
-				if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
-					target = 720;
-				else
-					target = 640;
+				else{
+					if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
+						target = 720;
+					else
+						target = 640;
+				}
 				continue;
 			case 640:
 				if (yCoordinate != vertical)
@@ -323,12 +285,10 @@ public class Amazing {
 			case 650:
 				if (z == 1)
 					target = 700;
-				else
-					target = 660;
-				continue;
-			case 660:
-				q = 1;
-				target = 680;
+				else{
+					q = 1;
+					target = 680;
+				}
 				continue;
 			case 670:
 				if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
@@ -338,9 +298,6 @@ public class Amazing {
 				continue;
 			case 680:
 				entryPoint = generateRandom(3);
-				target = 690;
-				continue;
-			case 690:
 				if (entryPoint == 1)
 					target = 980;
 				else if (entryPoint == 2)
@@ -352,9 +309,6 @@ public class Amazing {
 				continue;
 			case 700:
 				entryPoint = generateRandom(2);
-				target = 710;
-				continue;
-			case 710:
 				if (entryPoint == 1)
 					target = 980;
 				else if (entryPoint == 2)
@@ -432,9 +386,6 @@ public class Amazing {
 				continue;
 			case 850:
 				entryPoint = generateRandom(2);
-				target = 860;
-				continue;
-			case 860:
 				if (entryPoint == 1)
 					target = 1020;
 				else if (entryPoint == 2)
@@ -445,18 +396,14 @@ public class Amazing {
 			case 880:
 				if (yCoordinate != vertical)
 					target = 910;
-				else
-					target = 890;
-				continue;
-			case 890:
-				if (z == 1)
-					target = 210;
-				else
-					target = 900;
-				continue;
-			case 900:
-				q = 1;
-				target = 1090;
+				else{
+					if (z == 1)
+						target = 210;
+					else{
+						q = 1;
+						target = 1090;
+					}
+				}
 				continue;
 			case 910:
 				if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
@@ -466,23 +413,15 @@ public class Amazing {
 				continue;
 			case 940:
 				horizontalArray[xCoordinate - 1][yCoordinate] = c;
-				target = 950;
-				continue;
-			case 950:
 				c++;
 				verticalArray[xCoordinate - 1][yCoordinate] = 2;
 				xCoordinate--;
-				target = 960;
-				continue;
-			case 960:
 				if (c == horizontal * vertical + 1)
-					target = -1;
-				else
-					target = 970;
-				continue;
-			case 970:
-				q = 0;
-				target = 270;
+					exitLoop();
+				else{
+					q = 0;
+					mayValidateStartXPosition(xCoordinate);
+				}
 				continue;
 			case 980:
 				horizontalArray[xCoordinate][yCoordinate - 1] = c;
@@ -490,25 +429,17 @@ public class Amazing {
 				continue;
 			case 990:
 				c++;
-				target = 1000;
-				continue;
-			case 1000:
 				verticalArray[xCoordinate][yCoordinate - 1] = 1;
 				yCoordinate--;
 				if (c == horizontal * vertical + 1)
-					target = -1;
-				else
-					target = 1010;
-				continue;
-			case 1010:
-				q = 0;
-				target = 270;
+					exitLoop();
+				else{
+					q = 0;
+					mayValidateStartXPosition(xCoordinate);
+				}
 				continue;
 			case 1020:
 				horizontalArray[xCoordinate + 1][yCoordinate] = c;
-				target = 1030;
-				continue;
-			case 1030:
 				c++;
 				if (verticalArray[xCoordinate][yCoordinate] == 0)
 					target = 1050;
@@ -525,46 +456,32 @@ public class Amazing {
 				continue;
 			case 1060:
 				xCoordinate++;
-				target = 1070;
-				continue;
-			case 1070:
 				if (c == horizontal * vertical + 1)
-					target = -1;
+					exitLoop();
 				else
 					target = 600;
 				continue;
 			case 1090:
-				if (q == 1)
-					target = 1150;
-				else
-					target = 1100;
-				continue;
-			case 1100:
-				horizontalArray[xCoordinate][yCoordinate + 1] = c;
-				c++;
-				if (verticalArray[xCoordinate][yCoordinate] == 0)
-					target = 1120;
-				else
-					target = 1110;
-				continue;
-			case 1110:
-				verticalArray[xCoordinate][yCoordinate] = 3;
-				target = 1130;
-				continue;
-			case 1120:
-				verticalArray[xCoordinate][yCoordinate] = 1;
-				target = 1130;
+				if (q == 1){
+					z = 1;
+					target = 1160;
+				}else{
+					horizontalArray[xCoordinate][yCoordinate + 1] = c;
+					c++;
+					if (verticalArray[xCoordinate][yCoordinate] == 0){
+						verticalArray[xCoordinate][yCoordinate] = 1;
+					}else{
+						verticalArray[xCoordinate][yCoordinate] = 3;
+					}
+					target = 1130;
+				}
 				continue;
 			case 1130:
 				yCoordinate++;
 				if (c == vertical * horizontal + 1)
-					target = -1;
+					exitLoop();
 				else
-					target = 270;
-				continue;
-			case 1150:
-				z = 1;
-				target = 1160;
+					mayValidateStartXPosition(xCoordinate);
 				continue;
 			case 1160:
 				if (verticalArray[xCoordinate][yCoordinate] == 0)
@@ -588,7 +505,21 @@ public class Amazing {
 
 		}
 
-		// 1200:
+		drawMaze(horizontal, vertical, verticalArray);
+	}
+
+	private static void exitLoop() {
+		target = -1;
+	}
+
+	private static void mayValidateStartXPosition(int xCoordinate) {
+		if (xCoordinate - 1 == 0)
+			target = 600;
+		else
+			target = 280;
+	}
+
+	private static void drawMaze(int horizontal, int vertical, int[][] verticalArray) {
 		for (int j = 1; j <= vertical; j++) {
 			drawWall(horizontal, verticalArray, j);
 			drawPath(horizontal, verticalArray, j);

@@ -56,7 +56,7 @@ public class AmazingTest {
                 ":--:--:--:--:--:--:--:--:  :--:--:--:--:--:--:\n";
 
         Amazing.random = new Random(0);
-        Amazing.drawMaze(15, 20);
+        Amazing.generateMaze(15, 20);
 
         assertEquals("Should have the maze that was expected", expected, Amazing.result.toString());
     }
@@ -78,7 +78,7 @@ public class AmazingTest {
                 ":--:--:  :--:\n";
 
         Amazing.random = new Random(100);
-        Amazing.drawMaze(4, 5);
+        Amazing.generateMaze(4, 5);
         assertEquals("Should have the maze that was expected", expected, Amazing.result.toString());
 
     }
