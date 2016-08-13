@@ -15,12 +15,12 @@ public class Amazing {
 	static StringBuffer result = new StringBuffer();
 	private static int xCoordinate;
 	private static int yCoordinate;
-	private static int[][] horizontalArrays;
+	private static boolean[][] visitedPositionsArray;
 	private static int[][] verticalArrays;
 	private static int q;
 	private static int z;
 	private static int entryPoint;
-	private static int c;
+	private static int currentPosition;
 
 	public static void main(String[] args) {
 		generateMaze(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
@@ -50,8 +50,9 @@ public class Amazing {
 
 		if (isInvalidMazeDimension(horizontal, vertical))
 			return;
+		initializeArray(horizontal, vertical, new int[horizontal + 1][vertical + 1]);
 
-		horizontalArrays = initializeArray(horizontal, vertical);
+		visitedPositionsArray = new boolean[horizontal + 1][vertical + 1];
 
 		verticalArrays = initializeArray(horizontal, vertical);
 
@@ -62,9 +63,9 @@ public class Amazing {
 		// 130:170
 		printingFirstLine(horizontal, entryPoint);
 
-		c = 1;
-		horizontalArrays[entryPoint][1] = c;
-		c++;
+		currentPosition = 1;
+		markPositionAsVisited(entryPoint, 1);
+		moveOneStep();
 
 		xCoordinate = entryPoint;
 		yCoordinate = 1;
@@ -72,28 +73,14 @@ public class Amazing {
 
 		while (target != -1) {
 			switch (target) {
-			case 210:
-				if (xCoordinate != horizontal){
-					xCoordinate++;
-				}else{
-					if (yCoordinate != vertical){
-						xCoordinate = 1;
-						yCoordinate++;
-					}else{
-						xCoordinate = 1;
-						yCoordinate = 1;
-					}
-				}
-				target = 260;
-				continue;
 			case 260:
-				if (horizontalArrays[xCoordinate][yCoordinate] == 0)
-					target = 210;
+				if (!isAVisitedPosition(xCoordinate, yCoordinate))
+					mayMakeAMove(horizontal, vertical);
 				else
 					mayValidateStartXPosition(xCoordinate);
 				continue;
 			case 280:
-				if (horizontalArrays[xCoordinate - 1][yCoordinate] != 0)
+				if (isAVisitedPosition(xCoordinate-1, yCoordinate ))
 					target = 600;
 				else
 					target = 290;
@@ -105,7 +92,7 @@ public class Amazing {
 					target = 300;
 				continue;
 			case 300:
-				if (horizontalArrays[xCoordinate][yCoordinate - 1] != 0)
+				if (isAVisitedPosition(xCoordinate, yCoordinate -1))
 					target = 430;
 				else
 					target = 310;
@@ -117,7 +104,7 @@ public class Amazing {
 					target = 320;
 				continue;
 			case 320:
-				if (horizontalArrays[xCoordinate + 1][yCoordinate] != 0)
+				if(isAVisitedPosition(xCoordinate+1, yCoordinate ))
 					target = 350;
 				else
 					target = 330;
@@ -134,7 +121,7 @@ public class Amazing {
 					target = 350;
 				continue;
 			case 350:
-				if (yCoordinate != vertical)
+				if (isWithinBottomEdge(vertical))
 					target = 380;
 				else
 					target = 360;
@@ -150,7 +137,7 @@ public class Amazing {
 				target = 390;
 				continue;
 			case 380:
-				if (horizontalArrays[xCoordinate][yCoordinate + 1] != 0)
+				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
 					target = 410;
 				else
 					target = 390;
@@ -182,13 +169,13 @@ public class Amazing {
 					target = 440;
 				continue;
 			case 440:
-				if (horizontalArrays[xCoordinate + 1][yCoordinate] != 0)
+				if (isAVisitedPosition(xCoordinate+1, yCoordinate))					
 					target = 530;
 				else
 					target = 450;
 				continue;
 			case 450:
-				if (yCoordinate != vertical)
+				if (isWithinBottomEdge(vertical))
 					target = 480;
 				else
 					target = 460;
@@ -204,7 +191,7 @@ public class Amazing {
 				target = 490;
 				continue;
 			case 480:
-				if (horizontalArrays[xCoordinate][yCoordinate + 1] != 0)
+				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
 					target = 510;
 				else
 					target = 490;
@@ -230,7 +217,7 @@ public class Amazing {
 					target = 530;
 				continue;
 			case 530:
-				if (yCoordinate != vertical)
+				if (isWithinBottomEdge(vertical))
 					target = 560;
 				else
 					target = 540;
@@ -246,7 +233,7 @@ public class Amazing {
 				target = 570;
 				continue;
 			case 560:
-				if (horizontalArrays[xCoordinate][yCoordinate + 1] != 0)
+				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
 					target = 940;
 				else
 					target = 570;
@@ -267,7 +254,7 @@ public class Amazing {
 					target = 610;
 				continue;
 			case 610:
-				if (horizontalArrays[xCoordinate][yCoordinate - 1] != 0)
+				if(isAVisitedPosition(xCoordinate, yCoordinate-1 ))
 					target = 790;
 				else
 					target = 620;
@@ -276,14 +263,14 @@ public class Amazing {
 				if (xCoordinate == horizontal)
 					target = 720;
 				else{
-					if (horizontalArrays[xCoordinate + 1][yCoordinate] != 0)
+					if(isAVisitedPosition(xCoordinate+1, yCoordinate ))
 						target = 720;
 					else
 						target = 640;
 				}
 				continue;
 			case 640:
-				if (yCoordinate != vertical)
+				if (isWithinBottomEdge(vertical))
 					target = 670;
 				else
 					target = 650;
@@ -297,7 +284,7 @@ public class Amazing {
 				}
 				continue;
 			case 670:
-				if (horizontalArrays[xCoordinate][yCoordinate + 1] != 0)
+				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
 					target = 700;
 				else
 					target = 680;
@@ -323,7 +310,7 @@ public class Amazing {
 					target = 720;
 				continue;
 			case 720:
-				if (yCoordinate != vertical)
+				if (isWithinBottomEdge(vertical))
 					target = 750;
 				else
 					target = 730;
@@ -339,7 +326,7 @@ public class Amazing {
 				target = 760;
 				continue;
 			case 750:
-				if (horizontalArrays[xCoordinate][yCoordinate + 1] != 0)
+				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
 					target = 980;
 				else
 					target = 760;
@@ -363,13 +350,13 @@ public class Amazing {
 					target = 800;
 				continue;
 			case 800:
-				if (horizontalArrays[xCoordinate + 1][yCoordinate] != 0)
+				if (isAVisitedPosition(xCoordinate+1, yCoordinate))
 					target = 880;
 				else
 					target = 810;
 				continue;
 			case 810:
-				if (yCoordinate != vertical)
+				if (isWithinBottomEdge(vertical))
 					target = 840;
 				else
 					target = 820;
@@ -385,26 +372,24 @@ public class Amazing {
 				target = 990;
 				continue;
 			case 840:
-				if (horizontalArrays[xCoordinate][yCoordinate + 1] != 0)
+				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
 					target = 1020;
 				else
 					target = 850;
 				continue;
 			case 850:
 				entryPoint = generateRandom(2);
-				if (entryPoint == 1)
-					target = 1020;
-				else if (entryPoint == 2)
+				if (entryPoint == 2)
 					target = 1090;
 				else
 					target = 1020;
 				continue;
 			case 880:
-				if (yCoordinate != vertical)
+				if (isWithinBottomEdge(vertical))
 					target = 910;
 				else{
 					if (z == 1)
-						target = 210;
+						mayMakeAMove(horizontal, vertical);
 					else{
 						q = 1;
 						target = 1090;
@@ -412,17 +397,17 @@ public class Amazing {
 				}
 				continue;
 			case 910:
-				if (horizontalArrays[xCoordinate][yCoordinate + 1] != 0)
-					target = 210;
+				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
+					mayMakeAMove(horizontal, vertical);
 				else
 					target = 1090;
 				continue;
 			case 940:
-				horizontalArrays[xCoordinate - 1][yCoordinate] = c;
-				c++;
+				markPositionAsVisited(xCoordinate-1, yCoordinate);
+				moveOneStep();
 				verticalArrays[xCoordinate - 1][yCoordinate] = 2;
-				xCoordinate--;
-				if (c == horizontal * vertical + 1)
+				moveLeft();
+				if (isAtEndPoint(horizontal, vertical))
 					exitLoop();
 				else{
 					q = 0;
@@ -430,14 +415,14 @@ public class Amazing {
 				}
 				continue;
 			case 980:
-				horizontalArrays[xCoordinate][yCoordinate - 1] = c;
+				markPositionAsVisited(xCoordinate, yCoordinate-1);
 				target = 990;
 				continue;
 			case 990:
-				c++;
+				moveOneStep();
 				verticalArrays[xCoordinate][yCoordinate - 1] = 1;
-				yCoordinate--;
-				if (c == horizontal * vertical + 1)
+				moveUp();
+				if (isAtEndPoint(horizontal, vertical))
 					exitLoop();
 				else{
 					q = 0;
@@ -445,24 +430,15 @@ public class Amazing {
 				}
 				continue;
 			case 1020:
-				horizontalArrays[xCoordinate + 1][yCoordinate] = c;
-				c++;
-				if (verticalArrays[xCoordinate][yCoordinate] == 0)
-					target = 1050;
-				else
-					target = 1040;
-				continue;
-			case 1040:
-				verticalArrays[xCoordinate][yCoordinate] = 3;
-				target = 1060;
-				continue;
-			case 1050:
-				verticalArrays[xCoordinate][yCoordinate] = 2;
-				target = 1060;
-				continue;
-			case 1060:
-				xCoordinate++;
-				if (c == horizontal * vertical + 1)
+				markPositionAsVisited(xCoordinate+1, yCoordinate);
+				moveOneStep();
+				if (verticalArrays[xCoordinate][yCoordinate] == 0){
+					verticalArrays[xCoordinate][yCoordinate] = 2;
+				}else{
+					verticalArrays[xCoordinate][yCoordinate] = 3;
+				}
+				moveRight();
+				if (isAtEndPoint(horizontal, vertical))
 					exitLoop();
 				else
 					target = 600;
@@ -470,10 +446,17 @@ public class Amazing {
 			case 1090:
 				if (q == 1){
 					z = 1;
-					target = 1160;
+					if (verticalArrays[xCoordinate][yCoordinate] == 0){
+						verticalArrays[xCoordinate][yCoordinate] = 1;
+						q = 0;
+						positionAtTopLeftCorner();
+						target = 260;
+	
+					}else
+						target = 1170;
 				}else{
-					horizontalArrays[xCoordinate][yCoordinate + 1] = c;
-					c++;
+					markPositionAsVisited(xCoordinate, yCoordinate+1);
+					moveOneStep();
 					if (verticalArrays[xCoordinate][yCoordinate] == 0){
 						verticalArrays[xCoordinate][yCoordinate] = 1;
 					}else{
@@ -483,35 +466,81 @@ public class Amazing {
 				}
 				continue;
 			case 1130:
-				yCoordinate++;
-				if (c == vertical * horizontal + 1)
+				moveDown();
+				if (isAtEndPoint(vertical, horizontal))
 					exitLoop();
 				else
 					mayValidateStartXPosition(xCoordinate);
 				continue;
-			case 1160:
-				if (verticalArrays[xCoordinate][yCoordinate] == 0)
-					target = 1180;
-				else
-					target = 1170;
-				continue;
 			case 1170:
 				verticalArrays[xCoordinate][yCoordinate] = 3;
 				q = 0;
-				target = 210;
-				continue;
-			case 1180:
-				verticalArrays[xCoordinate][yCoordinate] = 1;
-				q = 0;
-				xCoordinate = 1;
-				yCoordinate = 1;
-				target = 260;
+				mayMakeAMove(horizontal, vertical);
 				continue;
 			}
 
 		}
 
 		drawMaze(horizontal, vertical, verticalArrays);
+	}
+
+	private static boolean isAVisitedPosition(int xCoordinate, int yCoordinate) {
+		return visitedPositionsArray[xCoordinate][yCoordinate] ;
+	}
+
+	private static void markPositionAsVisited(int xCordinate, int yCoordinate) {
+		visitedPositionsArray[xCordinate][yCoordinate] = true;
+	}
+
+	private static boolean isWithinBottomEdge(int vertical) {
+		return yCoordinate != vertical;
+	}
+
+	private static int moveOneStep() {
+		return currentPosition++;
+	}
+
+	private static void moveLeft() {
+		xCoordinate--;
+	}
+
+	private static void moveUp() {
+		yCoordinate--;
+	}
+
+	private static boolean isAtEndPoint(int horizontal, int vertical) {
+		return currentPosition == horizontal * vertical + 1;
+	}
+
+	private static void mayMakeAMove(int horizontal, int vertical) {
+		if (xCoordinate != horizontal){
+			moveRight();
+		}else{
+			if (isWithinBottomEdge(vertical)){
+				positionToExtremeLeft();
+				moveDown();
+			}else{
+				positionAtTopLeftCorner();
+			}
+		}
+		target = 260;
+	}
+
+	private static void positionToExtremeLeft() {
+		xCoordinate = 1;
+	}
+
+	private static void moveDown() {
+		yCoordinate++;
+	}
+
+	private static void moveRight() {
+		xCoordinate++;
+	}
+
+	private static void positionAtTopLeftCorner() {
+		positionToExtremeLeft();
+		yCoordinate = 1;
 	}
 
 	private static void exitLoop() {
@@ -527,7 +556,7 @@ public class Amazing {
 
 	private static void drawMaze(int horizontal, int vertical, int[][] verticalArray) {
 		for (int j = 1; j <= vertical; j++) {
-			drawWall(horizontal, verticalArray, j);
+			drawCorridors(horizontal, verticalArray, j);
 			drawPath(horizontal, verticalArray, j);
 		}
 	}
@@ -535,27 +564,39 @@ public class Amazing {
 	private static void drawPath(int horizontal, int[][] verticalArray, int j) {
 		for (int i = 1; i <= horizontal; i++) {
 			if (verticalArray[i][j] == 0 || verticalArray[i][j] == 2)
-				print(":--"); // 1300, 1340
-			else
-				print(":  "); // 1320
+				draweBottomWall();
+			else 
+				drawRightWall();
 		}
 
 		print(":"); // 1360
 		println();
 	}
 
-	private static void drawWall(int horizontal, int[][] verticalArray, int j) {
+	private static void drawRightWall() {
+		print(":  "); // 1320
+	}
+
+	private static void draweBottomWall() {
+		print(":--");
+	}
+
+	private static void drawCorridors(int horizontal, int[][] verticalArray, int j) {
 		print("I"); // 1210
 
 		for (int i = 1; i <= horizontal; i++) {
 			if (verticalArray[i][j] >= 2)
-				print("   "); // 1240
+				leavePathOpen();
 			else
 				print("  I"); // 1260
 		}
 
 		print(" "); // 1280
 		println();
+	}
+
+	private static void leavePathOpen() {
+		print("   "); // 1240
 	}
 
 	private static boolean isInvalidMazeDimension(int horizontal, int vertical) {
@@ -565,9 +606,9 @@ public class Amazing {
 	private static void printingFirstLine(int h, int x) {
 		for (int i = 1; i <= h; i++) {
 			if (i == x)
-				print(":  ");
+				drawRightWall();
 			else
-				print(":--");
+				draweBottomWall();
 		}
 		// 180
 		print(":");
