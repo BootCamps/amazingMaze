@@ -5,10 +5,17 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class AmazingTest {
 
+	Amazing amazing;
+	
+	@Before
+	public void setUp(){
+		amazing=new Amazing();
+	}
 	@Test
 	public void testSeed0size15x20() {
         String expected =
@@ -55,10 +62,10 @@ public class AmazingTest {
                 "I        I        I     I  I        I        I \n" +
                 ":--:--:--:--:--:--:--:--:  :--:--:--:--:--:--:\n";
 
-        Amazing.random = new Random(0);
-        Amazing.generateMaze(15, 20);
+        amazing.random = new Random(0);
+        amazing.generateMaze(15, 20);
 
-        assertEquals("Should have the maze that was expected", expected, Maze.result.toString());
+        assertEquals("Should have the maze that was expected", expected, amazing.maze.toString());
     }
 
     @Test
@@ -77,9 +84,9 @@ public class AmazingTest {
                 "I  I  I  I  I \n" +
                 ":--:--:  :--:\n";
 
-        Amazing.random = new Random(100);
-        Amazing.generateMaze(4, 5);
-        assertEquals("Should have the maze that was expected", expected, Maze.result.toString());
+        amazing.random = new Random(100);
+        amazing.generateMaze(4, 5);
+        assertEquals("Should have the maze that was expected", expected, amazing.maze.toString());
 
     }
 }

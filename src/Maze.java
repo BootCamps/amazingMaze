@@ -1,28 +1,30 @@
 
 public class Maze {
 
-	static StringBuffer result = new StringBuffer();
-
-	void clear() {
-		result.setLength(0);
+	private int width;
+	private int height;
+	private  int[][] maze;
+	private  boolean[][] visited;
+	int entryPoint;
+	MazePrinter mazePrinter=new MazePrinter();
+	
+	public Maze(int width, int height) {
+		this.width = width;
+		this.height = height;
+		this.visited = new boolean[width + 1][height + 1];
+		this.maze = initializeArray(width, height);
 	}
 
-	void println() {
-		result.append("\n");
+	public int[][] getMaze() {
+		return maze;
 	}
 
-	public void print(String text) {
-		result.append(text);
+	public boolean[][] getVisited() {
+		return visited;
 	}
 
-	void drawHeader() {
-		clear();
-		print("Amazing - Copyright by Creative Computing, Morristown, NJ");
-		println();
-	}
-
-	boolean isInvalidMazeDimension(int horizontal, int vertical) {
-		return horizontal == 1 || vertical == 1;
+	boolean isInvalidMazeDimension() {
+		return width == 1 || height == 1;
 	}
 
 	int[][] initializeArray(int h, int v) {
@@ -33,65 +35,21 @@ public class Maze {
 		return verticalArray;
 	}
 
-	void drawMaze(int horizontal, int vertical, int[][] verticalArray) {
-		for (int j = 1; j <= vertical; j++) {
-			drawCorridors(horizontal, verticalArray, j);
-			drawPath(horizontal, verticalArray, j);
-		}
+	void markPositionAsVisited(int xCordinate, int yCoordinate) {
+		visited[xCordinate][yCoordinate] = true;
 	}
 
-	void drawEntryForMaze(int h, int x) {
-		for (int i = 1; i <= h; i++) {
-			if (i == x)
-				drawLeftCorridor();
-			else
-				drawBottomWall();
-		}
-		// 180
-		print(":");
-		println();
+	boolean isAVisitedPosition(int xCoordinate, int yCoordinate) {
+		return visited[xCoordinate][yCoordinate];
 	}
 
-	void drawOpenCorridor() {
-		print("   "); // 1240
+	public void setEntryPoint(int entryPoint) {
+		this.entryPoint = entryPoint;
 	}
 
-	void drawPath(int horizontal, int[][] verticalArray, int j) {
-		for (int i = 1; i <= horizontal; i++) {
-			if (verticalArray[i][j] == 0 || verticalArray[i][j] == 2)
-				drawBottomWall();
-			else
-				drawLeftCorridor();
-		}
-
-		print(":");
-		println();
-	}
-
-	void drawCorridors(int horizontal, int[][] verticalArray, int j) {
-		print("I");
-
-		for (int i = 1; i <= horizontal; i++) {
-			if (verticalArray[i][j] >= 2)
-				drawOpenCorridor();
-			else
-				drawRightWall();
-		}
-
-		print(" ");
-		println();
-	}
-
-	void drawRightWall() {
-		print("  I");
-	}
-
-	void drawBottomWall() {
-		print(":--");
-	}
-
-	void drawLeftCorridor() {
-		print(":  ");
+	@Override
+	public String toString(){
+		return mazePrinter.drawMaze(maze,width,height,entryPoint);
 	}
 
 }

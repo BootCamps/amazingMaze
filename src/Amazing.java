@@ -10,53 +10,42 @@
 import java.util.Random;
 
 public class Amazing {
-	static int target = 0; // where GOTO goes
-	public static Random random = new Random(0);
-	private static int xCoordinate;
-	private static int yCoordinate;
-	private static boolean[][] visitedPositionsArray;
-	private static int[][] verticalArrays;
-	private static boolean q;
-	private static boolean z;
-	private static int entryPoint;
-	private static int currentPosition;
-	static Maze maze;
+	 private static final int CLOSED = 0;
+	int target = 0; // where GOTO goes
+	public  Random random = new Random(0);
+	private  int xCoordinate;
+	private  int yCoordinate;
+	private  boolean q;
+	private  boolean z;
+	int entryPoint;
+	private  int currentPosition;
+	 Maze maze;
 
 	public static void main(String[] args) {
-		generateMaze(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-		System.out.println(Maze.result);
+		Amazing amazing=new Amazing();
+		amazing.generateMaze(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+		System.out.println(amazing.maze.toString());
 	}
 
-	public static int generateRandom(int count) {
+	public  int generateRandom(int count) {
 		return (int) (count * random.nextFloat()) + 1;
 	}
 
-	public static void generateMaze(int horizontal, int vertical) {
-		maze = new Maze();
-		maze.drawHeader();
-		if (maze.isInvalidMazeDimension(horizontal, vertical))
+	public  void generateMaze(int width, int height) {
+		maze = new Maze(width,height);
+		if (maze.isInvalidMazeDimension())
 			return;
-		initializeMaze(horizontal, vertical);
-		maze.drawMaze(horizontal, vertical, verticalArrays);
+		initializeMaze(width, height);
 	}
 
-	private static void case510Method(int horizontal, int vertical) {
-		entryPoint = generateRandom(2);
-		if (entryPoint == 1)
-			case940Movement(horizontal, vertical);
-		else if (entryPoint == 2)
-			moveRightAndMarkPosition(horizontal, vertical);
-		else
-			case530Method(horizontal, vertical);
-	}
 
-	private static void case600Method(int horizontal, int vertical) {
-		if (yCoordinate - 1 == 0 || isAVisitedPosition(xCoordinate, yCoordinate - 1)) {
+	private  void case600Method(int horizontal, int vertical) {
+		if (yCoordinate - 1 == 0 || maze.isAVisitedPosition(xCoordinate, yCoordinate - 1)) {
 			case790Method(horizontal, vertical);
-		} else if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate))
+		} else if (xCoordinate == horizontal || maze.isAVisitedPosition(xCoordinate + 1, yCoordinate))
 			case720Method(horizontal, vertical);
 		else if ((isZTrue() && !isWithinBottomEdge(vertical))
-				|| isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1))
+				|| isWithinBottomEdge(vertical) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1))
 			mayMakeRandomCalculationForTwo(horizontal, vertical);
 		else if (isWithinBottomEdge(vertical)) {
 			mayMakeRandomCalculationForThree(horizontal, vertical);
@@ -66,8 +55,9 @@ public class Amazing {
 		}
 	}
 
-	private static void case530Method(int horizontal, int vertical) {
-		if (isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1)|| !isWithinBottomEdge(vertical) && isZTrue()) {
+	private  void case530Method(int horizontal, int vertical) {
+		if (isWithinBottomEdge(vertical) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1)
+				|| !isWithinBottomEdge(vertical) && isZTrue()) {
 			case940Movement(horizontal, vertical);
 		} else {
 			if (!isWithinBottomEdge(vertical)) {
@@ -81,7 +71,7 @@ public class Amazing {
 		}
 	}
 
-	private static void case390Method(int horizontal, int vertical) {
+	private  void case390Method(int horizontal, int vertical) {
 		entryPoint = generateRandom(3);
 		if (entryPoint == 1)
 			case940Movement(horizontal, vertical);
@@ -93,7 +83,7 @@ public class Amazing {
 			case410Method(horizontal, vertical);
 	}
 
-	private static void case410Method(int horizontal, int vertical) {
+	private  void case410Method(int horizontal, int vertical) {
 		entryPoint = generateRandom(2);
 		if (entryPoint == 1)
 			case940Movement(horizontal, vertical);
@@ -103,14 +93,60 @@ public class Amazing {
 			case430Method(horizontal, vertical);
 	}
 
-	private static void case280Method(int horizontal, int vertical) {
-		if (isAVisitedPosition(xCoordinate - 1, yCoordinate))
+	private  void case430Method(int horizontal, int vertical) {
+		if (xCoordinate == horizontal || maze.isAVisitedPosition(xCoordinate + 1, yCoordinate))
+			case530Method(horizontal, vertical);
+		else if (isWithinBottomEdge(vertical) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1)
+				|| !isWithinBottomEdge(vertical) && isZTrue())
+			case510Method(horizontal, vertical);
+		else {
+			if (!isWithinBottomEdge(vertical))
+				assignQ(true);
+
+			case490Method(horizontal, vertical);
+		}
+	}
+
+	private  void case490Method(int horizontal, int vertical) {
+		entryPoint = generateRandom(3);
+		if (entryPoint == 1)
+			case940Movement(horizontal, vertical);
+		else if (entryPoint == 2)
+			moveRightAndMarkPosition(horizontal, vertical);
+		else if (entryPoint == 3)
+			case1090Movement(horizontal, vertical);
+		else
+			case510Method(horizontal, vertical);
+	}
+
+	private  void case510Method(int horizontal, int vertical) {
+		entryPoint = generateRandom(2);
+		if (entryPoint == 1)
+			case940Movement(horizontal, vertical);
+		else if (entryPoint == 2)
+			moveRightAndMarkPosition(horizontal, vertical);
+		else
+			case530Method(horizontal, vertical);
+	}
+
+	private  void case940Movement(int horizontal, int vertical) {
+		maze.markPositionAsVisited(xCoordinate - 1, yCoordinate);
+		incrementCurrentPosition();
+		maze.getMaze()[xCoordinate - 1][yCoordinate] = 2;
+		moveLeft();
+		mayValidatePostMovement(horizontal, vertical);
+	}
+
+	
+	
+	private  void case280Method(int horizontal, int vertical) {
+		if (maze.isAVisitedPosition(xCoordinate - 1, yCoordinate))
 			case600Method(horizontal, vertical);
-		else if (yCoordinate - 1 == 0 || isAVisitedPosition(xCoordinate, yCoordinate - 1))
+		else if (yCoordinate - 1 == 0 || maze.isAVisitedPosition(xCoordinate, yCoordinate - 1))
 			case430Method(horizontal, vertical);
-		else if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate)){
+		else if (xCoordinate == horizontal || maze.isAVisitedPosition(xCoordinate + 1, yCoordinate)) {
 			case350Method(horizontal, vertical);
-		}else{
+		} else {
 			entryPoint = generateRandom(3);
 			if (entryPoint == 1)
 				case940Movement(horizontal, vertical);
@@ -123,10 +159,10 @@ public class Amazing {
 		}
 	}
 
-	private static void case350Method(int horizontal, int vertical) {
+	private  void case350Method(int horizontal, int vertical) {
 		if ((!isWithinBottomEdge(vertical) && isZTrue())
-				|| isWithinBottomEdge(vertical) && isAVisitedPosition(xCoordinate, yCoordinate + 1))
-							case410Method(horizontal, vertical);
+				|| isWithinBottomEdge(vertical) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1))
+			case410Method(horizontal, vertical);
 		else if (isWithinBottomEdge(vertical))
 			case390Method(horizontal, vertical);
 		else {
@@ -135,27 +171,11 @@ public class Amazing {
 		}
 	}
 
-	private static void case430Method(int horizontal, int vertical) {
-		if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate))
-			case530Method(horizontal, vertical);
-		else if (isWithinBottomEdge(vertical)) {
-			if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
-				case510Method(horizontal, vertical);
-			else
-				case490Method(horizontal, vertical);
-		} else {
-			if (isZTrue())
-				case510Method(horizontal, vertical);
-			else {
-				assignQ(true);
-				case490Method(horizontal, vertical);
-			}
-		}
-	}
 
-	private static void case720Method(int horizontal, int vertical) {
+
+	private  void case720Method(int horizontal, int vertical) {
 		if (isWithinBottomEdge(vertical)) {
-			if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
+			if (maze.isAVisitedPosition(xCoordinate, yCoordinate + 1))
 				mayMoveUp(horizontal, vertical);
 			else
 				case760Method(horizontal, vertical);
@@ -169,7 +189,7 @@ public class Amazing {
 		}
 	}
 
-	private static void case760Method(int horizontal, int vertical) {
+	private  void case760Method(int horizontal, int vertical) {
 		entryPoint = generateRandom(2);
 		if (entryPoint == 2)
 			case1090Movement(horizontal, vertical);
@@ -177,10 +197,10 @@ public class Amazing {
 			mayMoveUp(horizontal, vertical);
 	}
 
-	private static void case790Method(int horizontal, int vertical) {
-		if (xCoordinate == horizontal || isAVisitedPosition(xCoordinate + 1, yCoordinate)) {
+	private  void case790Method(int horizontal, int vertical) {
+		if (xCoordinate == horizontal || maze.isAVisitedPosition(xCoordinate + 1, yCoordinate)) {
 			if (isWithinBottomEdge(vertical)) {
-				if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
+				if (maze.isAVisitedPosition(xCoordinate, yCoordinate + 1))
 					mayMakeAMove(horizontal, vertical);
 				else
 					case1090Movement(horizontal, vertical);
@@ -191,7 +211,7 @@ public class Amazing {
 				case1090Movement(horizontal, vertical);
 			}
 		} else if (isWithinBottomEdge(vertical)) {
-			if (isAVisitedPosition(xCoordinate, yCoordinate + 1))
+			if (maze.isAVisitedPosition(xCoordinate, yCoordinate + 1))
 				moveRightAndMarkPosition(horizontal, vertical);
 			else {
 				entryPoint = generateRandom(2);
@@ -210,96 +230,73 @@ public class Amazing {
 		}
 	}
 
-	private static void case490Method(int horizontal, int vertical) {
-		entryPoint = generateRandom(3);
-		if (entryPoint == 1)
-			case940Movement(horizontal, vertical);
-		else if (entryPoint == 2)
-			moveRightAndMarkPosition(horizontal, vertical);
-		else if (entryPoint == 3)
-			case1090Movement(horizontal, vertical);
-		else
-			case510Method(horizontal, vertical);
-	}
 
-	private static void case940Movement(int horizontal, int vertical) {
-		markPositionAsVisited(xCoordinate - 1, yCoordinate);
-		moveOneStep();
-		verticalArrays[xCoordinate - 1][yCoordinate] = 2;
-		moveLeft();
-		mayValidatePostMovement(horizontal, vertical);
-	}
-
-	private static void case1090Movement(int horizontal, int vertical) {
+	private  void case1090Movement(int horizontal, int vertical) {
 		if (q) {
 			assignZ(true);
-			if (verticalArrays[xCoordinate][yCoordinate] == 0) {
-				verticalArrays[xCoordinate][yCoordinate] = 1;
+			if (maze.getMaze()[xCoordinate][yCoordinate] == CLOSED) {
+				maze.getMaze()[xCoordinate][yCoordinate] = 1;
 				assignQ(false);
 				positionAtTopLeftCorner();
 				makeAMoveIfNotVisited(horizontal, vertical);
 
 			} else {
-				verticalArrays[xCoordinate][yCoordinate] = 3;
+				maze.getMaze()[xCoordinate][yCoordinate] = 3;
 				assignQ(false);
 				mayMakeAMove(horizontal, vertical);
 			}
 		} else {
-			markPositionAsVisited(xCoordinate, yCoordinate + 1);
-			moveOneStep();
-			if (verticalArrays[xCoordinate][yCoordinate] == 0) {
-				verticalArrays[xCoordinate][yCoordinate] = 1;
+			maze.markPositionAsVisited(xCoordinate, yCoordinate + 1);
+			incrementCurrentPosition();
+			if (maze.getMaze()[xCoordinate][yCoordinate] == 0) {
+				maze.getMaze()[xCoordinate][yCoordinate] = 1;
 			} else {
-				verticalArrays[xCoordinate][yCoordinate] = 3;
+				maze.getMaze()[xCoordinate][yCoordinate] = 3;
 			}
 			moveDown();
-			if (isAtEndPoint(vertical, horizontal))
-				exitLoop();
-			else
-				mayValidateStartXPosition(xCoordinate, horizontal, vertical);
-
+			if (!isAtEndPoint(vertical, horizontal)) {
+				makeAMove(xCoordinate, horizontal, vertical);
+			}
 		}
 	}
 
-	private static void moveRightAndMarkPosition(int horizontal, int vertical) {
-		markPositionAsVisited(xCoordinate + 1, yCoordinate);
-		moveOneStep();
-		if (verticalArrays[xCoordinate][yCoordinate] == 0) {
-			verticalArrays[xCoordinate][yCoordinate] = 2;
+	private  void moveRightAndMarkPosition(int horizontal, int vertical) {
+		maze.markPositionAsVisited(xCoordinate + 1, yCoordinate);
+		incrementCurrentPosition();
+		if (maze.getMaze()[xCoordinate][yCoordinate] == 0) {
+			maze.getMaze()[xCoordinate][yCoordinate] = 2;
 		} else {
-			verticalArrays[xCoordinate][yCoordinate] = 3;
+			maze.getMaze()[xCoordinate][yCoordinate] = 3;
 		}
 		moveRight();
-		if (isAtEndPoint(horizontal, vertical))
-			exitLoop();
-		else
+		if (!isAtEndPoint(horizontal, vertical))
 			case600Method(horizontal, vertical);
 	}
 
-	private static void mayMoveUp(int horizontal, int vertical) {
-		markPositionAsVisited(xCoordinate, yCoordinate - 1);
+	private  void mayMoveUp(int horizontal, int vertical) {
+		maze.markPositionAsVisited(xCoordinate, yCoordinate - 1);
 		mayMoveUpAndValidate(horizontal, vertical);
 	}
 
-	private static boolean isZTrue() {
+	private  boolean isZTrue() {
 		return z;
 	}
 
-	private static void mayMoveUpAndValidate(int horizontal, int vertical) {
-		moveOneStep();
-		verticalArrays[xCoordinate][yCoordinate - 1] = 1;
+	private  void mayMoveUpAndValidate(int horizontal, int vertical) {
+		incrementCurrentPosition();
+		maze.getMaze()[xCoordinate][yCoordinate - 1] = 1;
 		moveUp();
 		mayValidatePostMovement(horizontal, vertical);
 	}
 
-	private static void makeAMoveIfNotVisited(int horizontal, int vertical) {
-		if (!isAVisitedPosition(xCoordinate, yCoordinate))
+	private  void makeAMoveIfNotVisited(int horizontal, int vertical) {
+		if (!maze.isAVisitedPosition(xCoordinate, yCoordinate))
 			mayMakeAMove(horizontal, vertical);
 		else
-			mayValidateStartXPosition(xCoordinate, horizontal, vertical);
+			makeAMove(xCoordinate, horizontal, vertical);
 	}
 
-	private static void mayMakeRandomCalculationForTwo(int horizontal, int vertical) {
+	private  void mayMakeRandomCalculationForTwo(int horizontal, int vertical) {
 		entryPoint = generateRandom(2);
 		if (entryPoint == 1)
 			mayMoveUp(horizontal, vertical);
@@ -309,7 +306,7 @@ public class Amazing {
 			case720Method(horizontal, vertical);
 	}
 
-	private static void mayMakeRandomCalculationForThree(int horizontal, int vertical) {
+	private  void mayMakeRandomCalculationForThree(int horizontal, int vertical) {
 		entryPoint = generateRandom(3);
 		if (entryPoint == 1)
 			mayMoveUp(horizontal, vertical);
@@ -321,72 +318,59 @@ public class Amazing {
 			mayMakeRandomCalculationForTwo(horizontal, vertical);
 	}
 
-	private static void mayValidatePostMovement(int horizontal, int vertical) {
-		if (isAtEndPoint(horizontal, vertical))
-			exitLoop();
-		else {
+	private  void mayValidatePostMovement(int horizontal, int vertical) {
+		if (!isAtEndPoint(horizontal, vertical)) {
 			assignQ(false);
-			mayValidateStartXPosition(xCoordinate, horizontal, vertical);
+			makeAMove(xCoordinate, horizontal, vertical);
 		}
 	}
 
-	private static void assignZ(boolean zState) {
+	private  void assignZ(boolean zState) {
 		z = zState;
 	}
 
-	private static void assignQ(boolean stateValue) {
+	private  void assignQ(boolean stateValue) {
 		q = stateValue;
 	}
 
-	private static void initializeMaze(int horizontal, int vertical) {
-		visitedPositionsArray = new boolean[horizontal + 1][vertical + 1];
-		verticalArrays = maze.initializeArray(horizontal, vertical);
+	private  void initializeMaze(int width, int height) {
 
 		assignQ(false);
 		assignZ(false);
-		entryPoint = generateRandom(horizontal);
-
-		// 130:170
-		maze.drawEntryForMaze(horizontal, entryPoint);
-
+		
+		entryPoint = generateRandom(width);
+		maze.setEntryPoint(entryPoint);
+		maze.markPositionAsVisited(entryPoint, 1);
+		
 		currentPosition = 1;
-		markPositionAsVisited(entryPoint, 1);
-		moveOneStep();
-
+		incrementCurrentPosition();
 		xCoordinate = entryPoint;
 		yCoordinate = 1;
-		mayValidateStartXPosition(xCoordinate, horizontal, vertical);
+
+		makeAMove(xCoordinate, width, height);
 	}
 
-	private static boolean isAVisitedPosition(int xCoordinate, int yCoordinate) {
-		return visitedPositionsArray[xCoordinate][yCoordinate];
-	}
-
-	private static void markPositionAsVisited(int xCordinate, int yCoordinate) {
-		visitedPositionsArray[xCordinate][yCoordinate] = true;
-	}
-
-	private static boolean isWithinBottomEdge(int vertical) {
+	private  boolean isWithinBottomEdge(int vertical) {
 		return yCoordinate != vertical;
 	}
 
-	private static int moveOneStep() {
+	private  int incrementCurrentPosition() {
 		return currentPosition++;
 	}
 
-	private static void moveLeft() {
+	private  void moveLeft() {
 		xCoordinate--;
 	}
 
-	private static void moveUp() {
+	private  void moveUp() {
 		yCoordinate--;
 	}
 
-	private static boolean isAtEndPoint(int horizontal, int vertical) {
+	private  boolean isAtEndPoint(int horizontal, int vertical) {
 		return currentPosition == horizontal * vertical + 1;
 	}
 
-	private static void mayMakeAMove(int horizontal, int vertical) {
+	private  void mayMakeAMove(int horizontal, int vertical) {
 		if (xCoordinate != horizontal) {
 			moveRight();
 		} else {
@@ -400,28 +384,24 @@ public class Amazing {
 		makeAMoveIfNotVisited(horizontal, vertical);
 	}
 
-	private static void positionToExtremeLeft() {
+	private  void positionToExtremeLeft() {
 		xCoordinate = 1;
 	}
 
-	private static void moveDown() {
+	private  void moveDown() {
 		yCoordinate++;
 	}
 
-	private static void moveRight() {
+	private  void moveRight() {
 		xCoordinate++;
 	}
 
-	private static void positionAtTopLeftCorner() {
+	private  void positionAtTopLeftCorner() {
 		positionToExtremeLeft();
 		yCoordinate = 1;
 	}
 
-	private static void exitLoop() {
-		target = -1;
-	}
-
-	private static void mayValidateStartXPosition(int xCoordinate, int horizontal, int vertical) {
+	private  void makeAMove(int xCoordinate, int horizontal, int vertical) {
 		if (xCoordinate - 1 == 0)
 			case600Method(horizontal, vertical);
 		else
