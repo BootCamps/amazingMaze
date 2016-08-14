@@ -19,8 +19,8 @@ public class Amazing {
 	public Random random = new Random(0);
 	private int xCoordinate;
 	private int yCoordinate;
-	private boolean shallContinue;
-	private boolean shallExit;
+	private boolean reachedEnd;
+	private boolean blocked;
 	int direction;
 	private int currentPosition;
 	Maze maze;
@@ -48,7 +48,7 @@ public class Amazing {
 		else if (isUpMovePossible())
 			case430Method(horizontal, vertical);
 		else if (isRightMovePossible(horizontal)) {
-			if ((isAtBottomEdge(vertical) && shallExit) || isDownMovePossible(vertical)){
+			if ((isAtBottomEdge(vertical) && blocked) || isDownMovementPossible(vertical)){
 				case410Method(horizontal, vertical);
 			}else {
 				setContinueFlag(vertical);
@@ -62,13 +62,7 @@ public class Amazing {
 				moveUp(horizontal, vertical);
 			else if (direction == 3)
 				moveRightAndMarkPosition(horizontal, vertical);
-			else
-				if ((isAtBottomEdge(vertical) && shallExit) || isDownMovePossible(vertical)){
-					case410Method(horizontal, vertical);
-				}else {
-					setContinueFlag(vertical);
-					case390Method(horizontal, vertical);
-				}
+
 		}
 	}
 
@@ -84,35 +78,29 @@ public class Amazing {
 			moveUp(horizontal, vertical);
 		else if (direction == 3)
 			case1090Movement(horizontal, vertical);
-		else
-			case410Method(horizontal, vertical);
 	}
 
 	private void case410Method(int horizontal, int vertical) {
 		direction = switchDirection(2);
 		if (direction == LEFT_DIRECTION)
 			moveLeft(horizontal, vertical);
-		else if (direction == 2)
+		else 
 			moveUp(horizontal, vertical);
-		else
-			case430Method(horizontal, vertical);
 	}
 
 	private void case430Method(int horizontal, int vertical) {
 		if (isRightMovePossible(horizontal))
 			case530Method(horizontal, vertical);
-		else if (isDownMovePossible(vertical) || isAtBottomEdge(vertical) && shallExit)
-			changeDirectionAndMove(horizontal, vertical);
+		else if (isDownMovementPossible(vertical) || isAtBottomEdge(vertical) && blocked)
+			changeDirectionAndMoveLeftOrRight(horizontal, vertical);
 		else {
-			if (isAtBottomEdge(vertical))
-				shallContinue = true;
-
+			setContinueFlag(vertical);
 			case490Method(horizontal, vertical);
 		}
 	}
 
-	private boolean isDownMovePossible(int vertical) {
-		return !isAtBottomEdge(vertical) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1);
+	private boolean isDownMovementPossible(int vertical) {
+		return isNotAtBottomEdge(vertical) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1);
 	}
 
 	private void case490Method(int horizontal, int vertical) {
@@ -123,26 +111,25 @@ public class Amazing {
 			moveRightAndMarkPosition(horizontal, vertical);
 		else if (direction == 3)
 			case1090Movement(horizontal, vertical);
-		else
-			changeDirectionAndMove(horizontal, vertical);
+
 	}
 
-	private int switchDirection(int paramValue) {
+	 int switchDirection(int paramValue) {
 		return generateRandom(paramValue);
 	}
 
-	private void changeDirectionAndMove(int horizontal, int vertical) {
+	private void changeDirectionAndMoveLeftOrRight(int horizontal, int vertical) {
 		direction = switchDirection(2);
 		if (direction == LEFT_DIRECTION)
 			moveLeft(horizontal, vertical);
-		else if (direction == 2)
+		else {
 			moveRightAndMarkPosition(horizontal, vertical);
-		else
-			case530Method(horizontal, vertical);
+		}
+		 
 	}
 
 	private void case530Method(int horizontal, int vertical) {
-		if (isDownMovePossible(vertical) || isAtBottomEdge(vertical) && shallExit) {
+		if (isDownMovementPossible(vertical) || isAtBottomEdge(vertical) && blocked) {
 			moveLeft(horizontal, vertical);
 		} else {
 			setContinueFlag(vertical);
@@ -159,17 +146,17 @@ public class Amazing {
 			case790Method(horizontal, vertical);
 		} else if (isRightMovePossible(horizontal))
 			case720Method(horizontal, vertical);
-		else if ((shallExit && isAtBottomEdge(vertical)) || isDownMovePossible(vertical))
-			mayMakeADownMove(horizontal, vertical);
+		else if ((blocked && isAtBottomEdge(vertical)) || isDownMovementPossible(vertical))
+			mayChangeDirectionOnReachingBottom(horizontal, vertical);
 		else {
 			setContinueFlag(vertical);
-			mayMakeRandomCalculationForThree(horizontal, vertical);
+			mayMakeRandomCalculationForAnyDirection(horizontal, vertical);
 		}
 	}
 
 	private void setContinueFlag(int vertical) {
 		if (isAtBottomEdge(vertical)) {
-			shallContinue = true;
+			reachedEnd = true;
 		}
 	}
 
@@ -179,7 +166,7 @@ public class Amazing {
 				moveUp(horizontal, vertical);
 			else
 				case760Method(horizontal, vertical);
-		} else if (shallExit)
+		} else if (blocked)
 			moveUp(horizontal, vertical);
 		else {
 			setContinueFlag(vertical);
@@ -206,7 +193,7 @@ public class Amazing {
 					findNextMove(horizontal, vertical);
 				else
 					case1090Movement(horizontal, vertical);
-			} else if (shallExit) {
+			} else if (blocked) {
 				findNextMove(horizontal, vertical);
 			} else {
 				setContinueFlag(vertical);
@@ -222,7 +209,7 @@ public class Amazing {
 				else
 					moveRightAndMarkPosition(horizontal, vertical);
 			}
-		} else if (shallExit) {
+		} else if (blocked) {
 			moveRightAndMarkPosition(horizontal, vertical);
 		} else {
 			setContinueFlag(vertical);
@@ -235,13 +222,13 @@ public class Amazing {
 		maze.getMaze()[xCoordinate - 1][yCoordinate] = BOTTOM_WALL;
 		xCoordinate--;
 		incrementCurrentPosition();
-		mayValidatePostMovement(horizontal, vertical);
+		makeNextMove(horizontal, vertical);
 	}
 
 	private void case1090Movement(int horizontal, int vertical) {
-		if (shallContinue) {
-			shallExit = true;
-			shallContinue = false;
+		if (reachedEnd) {
+			blocked = true;
+			reachedEnd = false;
 			if (maze.getMaze()[xCoordinate][yCoordinate] == CLOSE) {
 				maze.getMaze()[xCoordinate][yCoordinate] = RIGHT_WALL;
 				positionAtTopLeftCorner();
@@ -260,11 +247,19 @@ public class Amazing {
 	}
 
 	private boolean isUpMovePossible() {
-		return yCoordinate - 1 == 0 || maze.isAVisitedPosition(xCoordinate, yCoordinate - 1);
+		return isAtTheTopEdge() || maze.isAVisitedPosition(xCoordinate, yCoordinate - 1);
+	}
+
+	private boolean isAtTheTopEdge() {
+		return yCoordinate - 1 == 0;
 	}
 
 	private boolean isRightMovePossible(int horizontal) {
-		return xCoordinate == horizontal || maze.isAVisitedPosition(xCoordinate + 1, yCoordinate);
+		return isAtRightEdge(horizontal) || maze.isAVisitedPosition(xCoordinate + 1, yCoordinate);
+	}
+
+	private boolean isAtRightEdge(int horizontal) {
+		return xCoordinate == horizontal;
 	}
 
 	private void moveRightAndMarkPosition(int horizontal, int vertical) {
@@ -304,7 +299,7 @@ public class Amazing {
 		incrementCurrentPosition();
 		maze.getMaze()[xCoordinate][yCoordinate - 1] = 1;
 		moveUp();
-		mayValidatePostMovement(horizontal, vertical);
+		makeNextMove(horizontal, vertical);
 	}
 
 	private void makeAMoveIfNotVisited(int horizontal, int vertical) {
@@ -314,17 +309,15 @@ public class Amazing {
 			makeAMove(xCoordinate, horizontal, vertical);
 	}
 
-	private void mayMakeADownMove(int horizontal, int vertical) {
+	private void mayChangeDirectionOnReachingBottom(int horizontal, int vertical) {
 		direction = switchDirection(2);
 		if (direction == LEFT_DIRECTION)
 			moveUp(horizontal, vertical);
 		else if (direction == 2)
 			moveRightAndMarkPosition(horizontal, vertical);
-		else
-			case720Method(horizontal, vertical);
-	}
+ 	}
 
-	private void mayMakeRandomCalculationForThree(int horizontal, int vertical) {
+	private void mayMakeRandomCalculationForAnyDirection(int horizontal, int vertical) {
 		direction = switchDirection(3);
 		if (direction == LEFT_DIRECTION)
 			moveUp(horizontal, vertical);
@@ -332,21 +325,20 @@ public class Amazing {
 			moveRightAndMarkPosition(horizontal, vertical);
 		else if (direction == 3)
 			case1090Movement(horizontal, vertical);
-		else
-			mayMakeADownMove(horizontal, vertical);
+
 	}
 
-	private void mayValidatePostMovement(int horizontal, int vertical) {
+	private void makeNextMove(int horizontal, int vertical) {
 		if (!isAtExitPoint(horizontal, vertical)) {
-			shallContinue = false;
+			reachedEnd = false;
 			makeAMove(xCoordinate, horizontal, vertical);
 		}
 	}
-
+	
 	private void initializeMaze(int width, int height) {
 
-		shallContinue = false;
-		shallExit = false;
+		reachedEnd = false;
+		blocked = false;
 		int entryPosition = generateRandom(width);
 		maze.setEntryPoint(entryPosition);
 		maze.markPositionAsVisited(entryPosition, 1);
@@ -372,7 +364,7 @@ public class Amazing {
 	}
 
 	private void findNextMove(int width, int height) {
-		if (xCoordinate == width) {
+		if (isAtRightEdge(width)) {
 			if (isNotAtBottomEdge(height)) {
 				positionAtStartX();
 				moveDown();

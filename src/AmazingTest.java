@@ -5,8 +5,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class AmazingTest {
 
@@ -89,4 +91,10 @@ public class AmazingTest {
         assertEquals("Should have the maze that was expected", expected, amazing.maze.toString());
 
     }
+	
+    @Test
+	public void canSwitchDirection() throws Exception {
+		for(int i=0;i<10000;i++)
+			Assert.assertTrue(amazing.switchDirection(2)<=2);
+	}
 }
