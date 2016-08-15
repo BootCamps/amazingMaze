@@ -95,6 +95,6 @@ public class AmazingTest {
     @Test
 	public void canSwitchDirection() throws Exception {
 		for(int i=0;i<10000;i++)
-			Assert.assertTrue(amazing.switchDirection(2)<=2);
+			Assert.assertTrue(amazing.getRandomDirection(2)<=2);
 	}
 }
