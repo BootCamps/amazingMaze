@@ -61,6 +61,69 @@ public class Amazing {
 		yCoordinate = 1;
 	}
 
+	private void makeAMoveWhenAllDirectionsAreRestricted(int width, int height) {
+		direction = getRandomDirection(3);
+		if (direction == 1){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else if (direction == 2){
+			breakWallAndMoveRight(width, height);
+		}else{
+			makeAMove(width, height);
+		}
+	}
+
+	private void makeAMoveWhenRightWallIsPresent(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == 1)
+			breakWallAndMoveRight(width, height);
+		else
+			makeAMove(width, height);
+	}
+
+	private void makeAMoveWhenRightMoveAloneIsRestricted(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == 1){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else{
+			makeAMove(width, height);
+		}
+	}
+
+	private void makeAMoveWhenRightMoveIsRestricted(int width, int height) {
+		direction = getRandomDirection(3);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else if (direction == 2){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else
+			makeAMove(width, height);
+	}
+
+	private void makeAMoveWhenRightAndLeftMoveIsRestricted(int width, int height) {
+		if ( isDownMovementRestricted(height)){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else {
+			validateIfAtBottomRow(height);
+			makeAMoveWhenRightMoveAloneIsRestricted(width, height);
+		}
+	}
+
+	private void makeAMoveWhenRightMoveAloneIsPossible(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else {
+			breakWallAndMoveRight(width, height);
+		}
+	
+	}
+
 	private void makeAMoveWhenUpMoveIsRestricted(int width, int height) {
 		if (isRightMoveRestricted(width)) {
 			if (isDownMovementRestricted(height)) {
@@ -79,14 +142,6 @@ public class Amazing {
 			moveUp(width, height);
 			makeNextMove(width, height);
 		}
-	}
-
-	private void makeAMoveWhenRightWallIsPresent(int width, int height) {
-		direction = getRandomDirection(2);
-		if (direction == 1)
-			breakWallAndMoveRight(width, height);
-		else
-			makeAMove(width, height);
 	}
 
 	private void makeAMoveWhenLeftAndUpMoveIsRestricted(int width, int height) {
@@ -113,27 +168,38 @@ public class Amazing {
 			breakWallAndMoveRight(width, height);
 	}
 
-	private void makeAMoveWhenRightMoveAloneIsPossible(int width, int height) {
+	private void makeAMoveWhenDownMoveAloneIsPossible(int width, int height) {
 		direction = getRandomDirection(2);
 		if (direction == LEFT_DIRECTION){
 			moveLeft(width, height);
-			makeNextMove(width, height);
-		}else {
-			breakWallAndMoveRight(width, height);
-		}
-
-	}
-
-	private void makeAMoveWhenRightMoveAloneIsRestricted(int width, int height) {
-		direction = getRandomDirection(2);
-		if (direction == 1){
-			moveUp(width, height);
 			makeNextMove(width, height);
 		}else{
 			makeAMove(width, height);
 		}
 	}
-	
+
+	private void makeAMoveWhenRightAndDownMoveIsRestricted(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else if (direction == 2){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else
+			makeAMove(width, height);
+	}
+
+	private void makeAMoveWhenDownMoveIsRestricted(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == 1){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else{
+			breakWallAndMoveRight(width, height);
+		} 
+	}
+
 	private void validateIfAtBottomRow(int height) {
 		if (isAtBottomEdge(height)) {
 			reachedBottomRow = true;
@@ -241,7 +307,7 @@ public class Amazing {
 			if (isUpMoveRestricted()) {
 				makeAMoveWhenUpMoveIsRestricted(width, height);
 			} else if (isRightMoveRestricted(width)){
-				makeAMovedWhenRightMoveIsRestricted(width, height);
+				makeAMoveWhenRightAndLeftMoveIsRestricted(width, height);
 			}else if (isDownMovementRestricted(height)){
 				makeAMoveWhenDownMoveIsRestricted(width, height);
 			}else {
@@ -275,79 +341,13 @@ public class Amazing {
 		}
 	}
 
-	private void makeAMoveWhenRightMoveIsRestricted(int width, int height) {
-		direction = getRandomDirection(3);
-		if (direction == LEFT_DIRECTION){
-			moveLeft(width, height);
-			makeNextMove(width, height);
-		}else if (direction == 2){
-			moveUp(width, height);
-			makeNextMove(width, height);
-		}else
-			makeAMove(width, height);
-	}
-
-	private void makeAMoveWhenDownMoveAloneIsPossible(int width, int height) {
-		direction = getRandomDirection(2);
-		if (direction == LEFT_DIRECTION){
-			moveLeft(width, height);
-			makeNextMove(width, height);
-		}else{
-			makeAMove(width, height);
-		}
-	}
-
-	private void makeAMoveWhenRightAndDownMoveIsRestricted(int width, int height) {
-		direction = getRandomDirection(2);
-		if (direction == LEFT_DIRECTION){
-			moveLeft(width, height);
-			makeNextMove(width, height);
-		}else if (direction == 2){
-			moveUp(width, height);
-			makeNextMove(width, height);
-		}else
-			makeAMove(width, height);
-	}
-
-	private void makeAMoveWhenAllDirectionsAreRestricted(int width, int height) {
-		direction = getRandomDirection(3);
-		if (direction == 1){
-			moveUp(width, height);
-			makeNextMove(width, height);
-		}else if (direction == 2){
-			breakWallAndMoveRight(width, height);
-		}else{
-			makeAMove(width, height);
-		}
-	}
-
-	private void makeAMoveWhenDownMoveIsRestricted(int width, int height) {
-		direction = getRandomDirection(2);
-		if (direction == 1){
-			moveUp(width, height);
-			makeNextMove(width, height);
-		}else{
-			breakWallAndMoveRight(width, height);
-		} 
-	}
-
-	private void makeAMovedWhenRightMoveIsRestricted(int width, int height) {
-		if ( isDownMovementRestricted(height)){
-			moveUp(width, height);
-			makeNextMove(width, height);
-		}else {
-			validateIfAtBottomRow(height);
-			makeAMoveWhenRightMoveAloneIsRestricted(width, height);
-		}
-	}
-
 	private void breakWallAndMoveRight(int width, int height) {
 		moveRight();
 		if (!isAtExitPoint(width, height))
 			if (isUpMoveRestricted()) {
 				makeAMoveWhenUpMoveIsRestricted(width, height);
 			} else if (isRightMoveRestricted(width)){
-				makeAMovedWhenRightMoveIsRestricted(width, height);
+				makeAMoveWhenRightAndLeftMoveIsRestricted(width, height);
 			}else if (isDownMovementRestricted(height)){
 				makeAMoveWhenDownMoveIsRestricted(width, height);
 			}else {
