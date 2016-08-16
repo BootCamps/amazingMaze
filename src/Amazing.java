@@ -35,238 +35,16 @@ public class Amazing {
 		return (int) (count * random.nextFloat()) + 1;
 	}
 
+	int getRandomDirection(int paramValue) {
+		return generateRandom(paramValue);
+	}
+
 	public void generateMaze(int width, int height) {
 		maze = new Maze(width, height);
 		if (maze.isInvalidMazeDimension())
 			return;
 		initializeMaze(width, height);
-		makeAMove(xCoordinate, width, height);
-	}
-
-	private void case280Method(int width, int height) {
-		if (maze.isAVisitedPosition(xCoordinate - 1, yCoordinate))
-			case600Method(width, height);
-		else if (isUpMovePossible())
-			case430Method(width, height);
-		else if (isRightMovePossible(width)) {
-			if ((isAtBottomEdge(height) && blocked) || isDownMovementPossible(height)) {
-				changeDirectionWhenRightMovementIsPossible(width, height, 2);
-			} else {
-				setContinueFlag(height);
-				changeDirectionWhenRightMovementIsPossible(width, height, 3);
-			}
-		} else {
-			changeDirectionWhenUpAndRightMoveIsBlocked(width, height);
-		}
-	}
-
-	private void changeDirectionWhenUpAndRightMoveIsBlocked(int width, int height) {
-		direction = getRandomDirection(3);
-		if (direction == LEFT_DIRECTION)
-			moveLeft(width, height);
-		else if (direction == 2)
-			moveUpAndMarkPosition(width, height);
-		else
-			moveRightAndMarkPosition(width, height);
-	}
-
-	private void changeDirectionWhenRightMovementIsPossible(int width, int height, int maxRandomValue) {
-		direction = getRandomDirection(maxRandomValue);
-		if (direction == LEFT_DIRECTION)
-			moveLeft(width, height);
-		else if (direction == 2)
-			moveUpAndMarkPosition(width, height);
-		else
-			case1090Movement(width, height);
-	}
-
-	private void case430Method(int width, int height) {
-		if (isRightMovePossible(width))
-			case530Method(width, height);
-		else if (isDownMovementPossible(height) || isAtBottomEdge(height) && blocked)
-			changeDirectionAndMoveLeftOrRight(width, height);
-		else {
-			setContinueFlag(height);
-			case490Method(width, height);
-		}
-	}
-
-	private void case490Method(int width, int height) {
-		direction = getRandomDirection(3);
-		if (direction == LEFT_DIRECTION)
-			moveLeft(width, height);
-		else if (direction == 2)
-			moveRightAndMarkPosition(width, height);
-		else
-			case1090Movement(width, height);
-
-	}
-
-	private void case530Method(int width, int height) {
-		if (isDownMovementPossible(height) || isAtBottomEdge(height) && blocked) {
-			moveLeft(width, height);
-		} else {
-			setContinueFlag(height);
-			
-			direction = getRandomDirection(2);
-			if (direction == 1)
-				moveLeft(width, height);
-			else
-				case1090Movement(width, height);
-		}
-	}
-
-	private void case600Method(int width, int height) {
-		if (isUpMovePossible()) {
-			case790Method(width, height);
-		} else if (isRightMovePossible(width))
-			case720Method(width, height);
-		else if ((blocked && isAtBottomEdge(height)) || isDownMovementPossible(height))
-			changeDirection(width, height, 2);
-		else {
-			setContinueFlag(height);
-			changeDirection(width, height, 3);
-		}
-	}
-
-	private void case720Method(int width, int height) {
-		if ((isAtBottomEdge(height) && blocked) || isBottomRowAlreadyVisited(height))
-			moveUpAndMarkPosition(width, height);
-		else {
-			setContinueFlag(height);
-			changeDirectionWhenNotInBottomRow(width, height);
-		}
-	}
-
-	private void case790Method(int width, int height) {
-		if (isRightMovePossible(width)) {
-			if (!isAtBottomEdge(height) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1)
-					|| isAtBottomEdge(height) && blocked) {
-				findNextMove(width, height);
-			} else {
-				setContinueFlag(height);
-				case1090Movement(width, height);
-			}
-		} else if (!isAtBottomEdge(height)) {
-			if (maze.isAVisitedPosition(xCoordinate, yCoordinate + 1))
-				moveRightAndMarkPosition(width, height);
-			else {
-				changeDirectionWhenRightWallIsPresent(width, height);
-			}
-		} else if (!isRightMovePossible(width) && blocked) {
-			moveRightAndMarkPosition(width, height);
-		} else {
-			setContinueFlag(height);
-			moveUp(width, height);
-		}
-	}
-
-	private void changeDirectionWhenRightWallIsPresent(int width, int height) {
-		direction = getRandomDirection(2);
-		if (direction == 1)
-			moveRightAndMarkPosition(width, height);
-		else
-			case1090Movement(width, height);
-	}
-
-	private void case1090Movement(int width, int height) {
-		if (reachedBottomRow) {
-			blocked = true;
-			reachedBottomRow = false;
-			openWall(RIGHT_WALL);
-			findNextMove(width, height);
-		} else {
-			moveDown();
-			makeNextMove(width, height);
-		}
-	}
-
-	private boolean isDownMovementPossible(int height) {
-		return isBottomRowAlreadyVisited(height);
-	}
-
-	private void changeDirectionAndMoveLeftOrRight(int width, int height) {
-		direction = getRandomDirection(2);
-		if (direction == LEFT_DIRECTION)
-			moveLeft(width, height);
-		else {
-			moveRightAndMarkPosition(width, height);
-		}
-
-	}
-
-	int getRandomDirection(int paramValue) {
-		return generateRandom(paramValue);
-	}
-
-	private void setContinueFlag(int height) {
-		if (isAtBottomEdge(height)) {
-			reachedBottomRow = true;
-		}
-	}
-
-	private void changeDirectionWhenNotInBottomRow(int width, int height) {
-		direction = getRandomDirection(2);
-		if (direction == 2)
-			case1090Movement(width, height);
-		else
-			moveUpAndMarkPosition(width, height);
-	}
-
-	private boolean isBottomRowAlreadyVisited(int height) {
-		return !isAtBottomEdge(height) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1);
-	}
-
-	private boolean isUpMovePossible() {
-		return isAtTheTopEdge() || maze.isAVisitedPosition(xCoordinate, yCoordinate - 1);
-	}
-
-	private boolean isRightMovePossible(int width) {
-		return isAtRightEdge(width) || maze.isAVisitedPosition(xCoordinate + 1, yCoordinate);
-	}
-
-	private void moveRightAndMarkPosition(int width, int height) {
-		moveRight();
-		if (!isAtExitPoint(width, height))
-			case600Method(width, height);
-	}
-
-	private void moveDown() {
-		maze.markPositionAsVisited(xCoordinate, yCoordinate + 1);
-		openWall(RIGHT_WALL);
-		incrementCurrentPosition();
-		goDown();
-	}
-
-	private void moveRight() {
-		maze.markPositionAsVisited(xCoordinate + 1, yCoordinate);
-		openWall(BOTTOM_WALL);
-		incrementCurrentPosition();
-		goRight();
-	}
-
-	private void openWall(int keepWall) {
-		if (maze.getMaze()[xCoordinate][yCoordinate] == CLOSE) {
-			maze.getMaze()[xCoordinate][yCoordinate] = keepWall;
-		} else {
-			maze.getMaze()[xCoordinate][yCoordinate] = OPEN;
-		}
-	}
-
-	private void moveUpAndMarkPosition(int width, int height) {
-		maze.markPositionAsVisited(xCoordinate, yCoordinate - 1);
-		moveUp(width, height);
-	}
-
-	private void changeDirection(int width, int height, int maxRandomValue) {
-		direction = getRandomDirection(maxRandomValue);
-		if (direction == LEFT_DIRECTION)
-			moveUpAndMarkPosition(width, height);
-		else if (direction == 2)
-			moveRightAndMarkPosition(width, height);
-		else
-			case1090Movement(width, height);
-
+		initiateAMove(xCoordinate, width, height);
 	}
 
 	private void initializeMaze(int width, int height) {
@@ -283,6 +61,140 @@ public class Amazing {
 		yCoordinate = 1;
 	}
 
+	private void makeAMoveWhenUpMoveIsRestricted(int width, int height) {
+		if (isRightMoveRestricted(width)) {
+			if (isDownMovementRestricted(height)) {
+				findNextMove(width, height);
+			} else {
+				validateIfAtBottomRow(height);
+				makeAMove(width, height);
+			}
+		} else if (isBottomRowAlreadyVisited(height)){
+			breakWallAndMoveRight(width, height);
+		} else if(!isAtBottomEdge(height)){
+			makeAMoveWhenRightWallIsPresent(width, height);
+		} else if (blocked) {
+			breakWallAndMoveRight(width, height);
+		} else {
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}
+	}
+
+	private void makeAMoveWhenRightWallIsPresent(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == 1)
+			breakWallAndMoveRight(width, height);
+		else
+			makeAMove(width, height);
+	}
+
+	private void makeAMoveWhenLeftAndUpMoveIsRestricted(int width, int height) {
+		direction = getRandomDirection(3);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else if (direction == 2)
+			breakWallAndMoveRight(width, height);
+		else
+			makeAMove(width, height);
+
+	}
+
+	private void makeAMoveWhenDownMovementIsRestricted(int width, int height) {
+		direction = getRandomDirection(3);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else if (direction == 2){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else
+			breakWallAndMoveRight(width, height);
+	}
+
+	private void makeAMoveWhenRightMoveAloneIsPossible(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else {
+			breakWallAndMoveRight(width, height);
+		}
+
+	}
+
+	private void makeAMoveWhenRightMoveAloneIsRestricted(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == 1){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else{
+			makeAMove(width, height);
+		}
+	}
+	
+	private void validateIfAtBottomRow(int height) {
+		if (isAtBottomEdge(height)) {
+			reachedBottomRow = true;
+		}
+	}
+
+	private boolean isTopRowAlreadyVisited() {
+		return maze.isAVisitedPosition(xCoordinate - 1, yCoordinate);
+	}
+
+	private boolean isBottomRowAlreadyVisited(int height) {
+		return !isAtBottomEdge(height) && maze.isAVisitedPosition(xCoordinate, yCoordinate + 1);
+	}
+
+	private boolean isUpMoveRestricted() {
+		return isAtTheTopEdge() || maze.isAVisitedPosition(xCoordinate, yCoordinate - 1);
+	}
+
+	private boolean isRightMoveRestricted(int width) {
+		return isAtRightEdge(width) || maze.isAVisitedPosition(xCoordinate + 1, yCoordinate);
+	}
+
+	private boolean isDownMovementRestricted(int height) {
+		return isBottomRowAlreadyVisited(height) || (isAtBottomEdge(height) && blocked);
+	}
+
+	private void moveDown() {
+		maze.markPositionAsVisited(xCoordinate, yCoordinate + 1);
+		openWall(RIGHT_WALL);
+		goDown();
+		incrementCurrentPosition();
+	}
+
+	private void moveRight() {
+		maze.markPositionAsVisited(xCoordinate + 1, yCoordinate);
+		openWall(BOTTOM_WALL);
+		goRight();
+		incrementCurrentPosition();
+	}
+
+	private void moveUp(int width, int height) {
+		maze.markPositionAsVisited(xCoordinate, yCoordinate - 1);
+		makeWall(xCoordinate, yCoordinate-1, RIGHT_WALL);
+		goUp();
+		incrementCurrentPosition();
+	}
+
+	private void moveLeft(int width, int height) {
+		maze.markPositionAsVisited(xCoordinate - 1, yCoordinate);
+		makeWall(xCoordinate-1, yCoordinate, BOTTOM_WALL);
+		goLeft();
+		incrementCurrentPosition();
+	}
+
+	private void openWall(int keepWall) {
+		if (maze.getMaze()[xCoordinate][yCoordinate] == CLOSE) {
+			maze.getMaze()[xCoordinate][yCoordinate] = keepWall;
+		} else {
+			maze.getMaze()[xCoordinate][yCoordinate] = OPEN;
+		}
+	}
 
 	private void findNextMove(int width, int height) {
 		
@@ -298,7 +210,7 @@ public class Amazing {
 		if (!maze.isAVisitedPosition(xCoordinate, yCoordinate))
 			findNextMove(width, height);
 		else
-			makeAMove(xCoordinate, width, height);
+			initiateAMove(xCoordinate, width, height);
 	}
 
 	private void makeNextMove(int width, int height) {
@@ -308,30 +220,144 @@ public class Amazing {
 		}
 		
 		if (!isAtExitPoint(width, height)) {
-			makeAMove(xCoordinate, width, height);
+			initiateAMove(xCoordinate, width, height);
 		}
 	}
 
-	private void makeAMove(int xCoordinate, int width, int height) {
-		if (isAtLeftEdge(xCoordinate))
-			case600Method(width, height);
-		else
-			case280Method(width, height);
+	private void makeAMove(int width, int height) {
+		if (reachedBottomRow) {
+			blocked = true;
+			reachedBottomRow = false;
+			openWall(RIGHT_WALL);
+			findNextMove(width, height);
+		} else {
+			moveDown();
+			makeNextMove(width, height);
+		}
 	}
 
-	private void moveUp(int width, int height) {
-		incrementCurrentPosition();
-		maze.getMaze()[xCoordinate][yCoordinate - 1] = 1;
-		goUp();
-		makeNextMove(width, height);
+	private void initiateAMove(int xCoordinate, int width, int height) {
+		if (isAtLeftEdge() || isTopRowAlreadyVisited()) {
+			if (isUpMoveRestricted()) {
+				makeAMoveWhenUpMoveIsRestricted(width, height);
+			} else if (isRightMoveRestricted(width)){
+				makeAMovedWhenRightMoveIsRestricted(width, height);
+			}else if (isDownMovementRestricted(height)){
+				makeAMoveWhenDownMoveIsRestricted(width, height);
+			}else {
+				validateIfAtBottomRow(height);
+				makeAMoveWhenAllDirectionsAreRestricted(width, height);
+			}
+		} else if (isUpMoveRestricted()) {
+			if (isRightMoveRestricted(width)){
+				if (isDownMovementRestricted(height)) {
+					moveLeft(width, height);
+					makeNextMove(width, height);
+				} else {
+					validateIfAtBottomRow(height);
+					makeAMoveWhenDownMoveAloneIsPossible(width, height);
+				}
+			}else if (isDownMovementRestricted(height)){
+				makeAMoveWhenRightMoveAloneIsPossible(width, height);
+			}else {
+				validateIfAtBottomRow(height);
+				makeAMoveWhenLeftAndUpMoveIsRestricted(width, height);
+			}
+		} else if (isRightMoveRestricted(width)) {
+			if (isDownMovementRestricted(height)) {
+				makeAMoveWhenRightAndDownMoveIsRestricted(width, height);
+			} else {
+				validateIfAtBottomRow(height);
+				makeAMoveWhenRightMoveIsRestricted(width, height);
+			}
+		} else {
+			makeAMoveWhenDownMovementIsRestricted(width, height);
+		}
 	}
 
-	private void moveLeft(int width, int height) {
-		maze.markPositionAsVisited(xCoordinate - 1, yCoordinate);
-		maze.getMaze()[xCoordinate - 1][yCoordinate] = BOTTOM_WALL;
-		goLeft();
-		incrementCurrentPosition();
-		makeNextMove(width, height);
+	private void makeAMoveWhenRightMoveIsRestricted(int width, int height) {
+		direction = getRandomDirection(3);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else if (direction == 2){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else
+			makeAMove(width, height);
+	}
+
+	private void makeAMoveWhenDownMoveAloneIsPossible(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else{
+			makeAMove(width, height);
+		}
+	}
+
+	private void makeAMoveWhenRightAndDownMoveIsRestricted(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == LEFT_DIRECTION){
+			moveLeft(width, height);
+			makeNextMove(width, height);
+		}else if (direction == 2){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else
+			makeAMove(width, height);
+	}
+
+	private void makeAMoveWhenAllDirectionsAreRestricted(int width, int height) {
+		direction = getRandomDirection(3);
+		if (direction == 1){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else if (direction == 2){
+			breakWallAndMoveRight(width, height);
+		}else{
+			makeAMove(width, height);
+		}
+	}
+
+	private void makeAMoveWhenDownMoveIsRestricted(int width, int height) {
+		direction = getRandomDirection(2);
+		if (direction == 1){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else{
+			breakWallAndMoveRight(width, height);
+		} 
+	}
+
+	private void makeAMovedWhenRightMoveIsRestricted(int width, int height) {
+		if ( isDownMovementRestricted(height)){
+			moveUp(width, height);
+			makeNextMove(width, height);
+		}else {
+			validateIfAtBottomRow(height);
+			makeAMoveWhenRightMoveAloneIsRestricted(width, height);
+		}
+	}
+
+	private void breakWallAndMoveRight(int width, int height) {
+		moveRight();
+		if (!isAtExitPoint(width, height))
+			if (isUpMoveRestricted()) {
+				makeAMoveWhenUpMoveIsRestricted(width, height);
+			} else if (isRightMoveRestricted(width)){
+				makeAMovedWhenRightMoveIsRestricted(width, height);
+			}else if (isDownMovementRestricted(height)){
+				makeAMoveWhenDownMoveIsRestricted(width, height);
+			}else {
+				validateIfAtBottomRow(height);
+				makeAMoveWhenAllDirectionsAreRestricted(width, height);
+			}
+	}
+
+	private void makeWall(int xCoordinate, int yCoordinate, int wallToBuild) {
+		maze.getMaze()[xCoordinate][yCoordinate] = wallToBuild;
 	}
 
 	private int incrementCurrentPosition() {
@@ -366,7 +392,7 @@ public class Amazing {
 		return isAtRightEdge(width) && isAtBottomEdge(height);
 	}
 
-	private boolean isAtLeftEdge(int xCoordinate) {
+	private boolean isAtLeftEdge() {
 		return xCoordinate - 1 == 0;
 	}
 
