@@ -14,7 +14,7 @@ public class Amazing {
     static StringBuffer result = new StringBuffer();
 
     public static void main(String[] args) {
-        drawMaze(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+        doit(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
         System.out.println(result);
     }
 
@@ -30,581 +30,599 @@ public class Amazing {
         result.append(text);
     }
 
-    public static int generateRandom(int count) {
+    public static int rnd(int count) {
         return (int) (count * random.nextFloat()) + 1;
     }
 
-    public static void drawMaze(int horizontal, int vertical) {
+    public static void GOTO(int lineno) {
+        target = lineno;
+    }
+
+    public static void doit(int horizontal, int vertical) {
         clear();
         print("Amazing - Copyright by Creative Computing, Morristown, NJ");
         println();
 
-        if (isInvalidMazeDimension(horizontal, vertical)) return;
+        if (horizontal == 1 || vertical == 1) return;
 
-        int[][] horizontalArray = initializeArray(horizontal, vertical);
+        int[][] horizontalArray = new int[horizontal + 1][vertical + 1];
+        for (int i = 0; i <= horizontal; i++) {
+            horizontalArray[i] = new int[vertical + 1];
+        }
 
-        int[][] verticalArray = initializeArray(horizontal, vertical);
+        int[][] verticalArray = new int[horizontal + 1][vertical + 1];
+        for (int i = 0; i <= horizontal; i++) {
+            verticalArray[i] = new int[vertical + 1];
+        }
 
         int q = 0;
         int z = 0;
-        int entryPoint = generateRandom(horizontal);
+        int mazeEntryPoint = rnd(horizontal);
 
         // 130:170
-        printingFirstLine(horizontal, entryPoint);
+        for (int i = 1; i <= horizontal; i++) {
+            if (i == mazeEntryPoint)
+                print(":  ");
+            else
+                print(":--");
+        }
+        // 180
+        print(":");
+        println();
 
         // 190
         int c = 1;
-        horizontalArray[entryPoint][1] = c;
+        horizontalArray[mazeEntryPoint][1] = c;
         c++;
 
         // 200
-        int xCoordinate = entryPoint;
-        int yCoordinate = 1;
-        target = 270;
+        int r = mazeEntryPoint;
+        int s = 1;
+        GOTO(270);
 
         while (target != -1) {
             switch (target) {
                 case 210:
-                    if (xCoordinate != horizontal)
-						target = 250;
-					else
-						target = 220;
+                    if (r != horizontal)
+                        GOTO(250);
+                    else
+                        GOTO(220);
                     continue;
                 case 220:
-                    if (yCoordinate != vertical)
-						target = 240;
-					else
-						target = 230;
+                    if (s != vertical)
+                        GOTO(240);
+                    else
+                        GOTO(230);
                     continue;
                 case 230:
-                    xCoordinate = 1;
-                    yCoordinate = 1;
-				target = 260;
+                    r = 1;
+                    s = 1;
+                    GOTO(260);
                     continue;
                 case 240:
-                    xCoordinate = 1;
-                    yCoordinate++;
-				target = 260;
+                    r = 1;
+                    s++;
+                    GOTO(260);
                     continue;
                 case 250:
-                    xCoordinate++;
-				target = 260;
+                    r++;
+                    GOTO(260);
                     continue;
                 case 260:
-                    if (horizontalArray[xCoordinate][yCoordinate] == 0)
-						target = 210;
-					else
-						target = 270;
+                    if (horizontalArray[r][s] == 0)
+                        GOTO(210);
+                    else
+                        GOTO(270);
                     continue;
                 case 270:
-                    if (xCoordinate - 1 == 0)
-						target = 600;
-					else
-						target = 280;
+                    if (r - 1 == 0)
+                        GOTO(600);
+                    else
+                        GOTO(280);
                     continue;
                 case 280:
-                    if (horizontalArray[xCoordinate - 1][yCoordinate] != 0)
-						target = 600;
-					else
-						target = 290;
+                    if (horizontalArray[r - 1][s] != 0)
+                        GOTO(600);
+                    else
+                        GOTO(290);
                     continue;
                 case 290:
-                    if (yCoordinate - 1 == 0)
-						target = 430;
-					else
-						target = 300;
+                    if (s - 1 == 0)
+                        GOTO(430);
+                    else
+                        GOTO(300);
                     continue;
                 case 300:
-                    if (horizontalArray[xCoordinate][yCoordinate - 1] != 0)
-						target = 430;
-					else
-						target = 310;
+                    if (horizontalArray[r][s - 1] != 0)
+                        GOTO(430);
+                    else
+                        GOTO(310);
                     continue;
                 case 310:
-                    if (xCoordinate == horizontal)
-						target = 350;
-					else
-						target = 320;
+                    if (r == horizontal)
+                        GOTO(350);
+                    else
+                        GOTO(320);
                     continue;
                 case 320:
-                    if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
-						target = 350;
-					else
-						target = 330;
+                    if (horizontalArray[r + 1][s] != 0)
+                        GOTO(350);
+                    else
+                        GOTO(330);
                     continue;
                 case 330:
-                    entryPoint = generateRandom(3);
-				target = 340;
+                    mazeEntryPoint = rnd(3);
+                    GOTO(340);
                     continue;
                 case 340:
-                    if (entryPoint == 1)
-						target = 940;
-					else if (entryPoint == 2)
-						target = 980;
-					else if (entryPoint == 3)
-						target = 1020;
-					else
-						target = 350;
+                    if (mazeEntryPoint == 1)
+                        GOTO(940);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(980);
+                    else if (mazeEntryPoint == 3)
+                        GOTO(1020);
+                    else
+                        GOTO(350);
                     continue;
                 case 350:
-                    if (yCoordinate != vertical)
-						target = 380;
-					else
-						target = 360;
+                    if (s != vertical)
+                        GOTO(380);
+                    else
+                        GOTO(360);
                     continue;
                 case 360:
                     if (z == 1)
-						target = 410;
-					else
-						target = 370;
+                        GOTO(410);
+                    else
+                        GOTO(370);
                     continue;
                 case 370:
                     q = 1;
-				target = 390;
+                    GOTO(390);
                     continue;
                 case 380:
-                    if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-						target = 410;
-					else
-						target = 390;
+                    if (horizontalArray[r][s + 1] != 0)
+                        GOTO(410);
+                    else
+                        GOTO(390);
                     continue;
                 case 390:
-                    entryPoint = generateRandom(3);
-				target = 400;
+                    mazeEntryPoint = rnd(3);
+                    GOTO(400);
                     continue;
                 case 400:
-                    if (entryPoint == 1)
-						target = 940;
-					else if (entryPoint == 2)
-						target = 980;
-					else if (entryPoint == 3)
-						target = 1090;
-					else
-						target = 410;
+                    if (mazeEntryPoint == 1)
+                        GOTO(940);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(980);
+                    else if (mazeEntryPoint == 3)
+                        GOTO(1090);
+                    else
+                        GOTO(410);
                     continue;
                 case 410:
-                    entryPoint = generateRandom(2);
-				target = 420;
+                    mazeEntryPoint = rnd(2);
+                    GOTO(420);
                     continue;
                 case 420:
-                    if (entryPoint == 1)
-						target = 940;
-					else if (entryPoint == 2)
-						target = 980;
-					else
-						target = 430;
+                    if (mazeEntryPoint == 1)
+                        GOTO(940);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(980);
+                    else
+                        GOTO(430);
                     continue;
                 case 430:
-                    if (xCoordinate == horizontal)
-						target = 530;
-					else
-						target = 440;
+                    if (r == horizontal)
+                        GOTO(530);
+                    else
+                        GOTO(440);
                     continue;
                 case 440:
-                    if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
-						target = 530;
-					else
-						target = 450;
+                    if (horizontalArray[r + 1][s] != 0)
+                        GOTO(530);
+                    else
+                        GOTO(450);
                     continue;
                 case 450:
-                    if (yCoordinate != vertical)
-						target = 480;
-					else
-						target = 460;
+                    if (s != vertical)
+                        GOTO(480);
+                    else
+                        GOTO(460);
                     continue;
                 case 460:
                     if (z == 1)
-						target = 510;
-					else
-						target = 470;
+                        GOTO(510);
+                    else
+                        GOTO(470);
                     continue;
                 case 470:
                     q = 1;
-				target = 490;
+                    GOTO(490);
                     continue;
                 case 480:
-                    if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-						target = 510;
-					else
-						target = 490;
+                    if (horizontalArray[r][s + 1] != 0)
+                        GOTO(510);
+                    else
+                        GOTO(490);
                     continue;
                 case 490:
-                    entryPoint = generateRandom(3);
-				target = 500;
+                    mazeEntryPoint = rnd(3);
+                    GOTO(500);
                     continue;
                 case 500:
-                    if (entryPoint == 1)
-						target = 940;
-					else if (entryPoint == 2)
-						target = 1020;
-					else if (entryPoint == 3)
-						target = 1090;
-					else
-						target = 510;
+                    if (mazeEntryPoint == 1)
+                        GOTO(940);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(1020);
+                    else if (mazeEntryPoint == 3)
+                        GOTO(1090);
+                    else
+                        GOTO(510);
                     continue;
                 case 510:
-                    entryPoint = generateRandom(2);
-				target = 520;
+                    mazeEntryPoint = rnd(2);
+                    GOTO(520);
                     continue;
                 case 520:
-                    if (entryPoint == 1)
-						target = 940;
-					else if (entryPoint == 2)
-						target = 1020;
-					else
-						target = 530;
+                    if (mazeEntryPoint == 1)
+                        GOTO(940);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(1020);
+                    else
+                        GOTO(530);
                     continue;
                 case 530:
-                    if (yCoordinate != vertical)
-						target = 560;
-					else
-						target = 540;
+                    if (s != vertical)
+                        GOTO(560);
+                    else
+                        GOTO(540);
                     continue;
                 case 540:
                     if (z == 1)
-						target = 590;
-					else
-						target = 550;
+                        GOTO(590);
+                    else
+                        GOTO(550);
                     continue;
                 case 550:
                     q = 1;
-				target = 570;
+                    GOTO(570);
                     continue;
                 case 560:
-                    if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-						target = 590;
-					else
-						target = 570;
+                    if (horizontalArray[r][s + 1] != 0)
+                        GOTO(590);
+                    else
+                        GOTO(570);
                     continue;
                 case 570:
-                    entryPoint = generateRandom(2);
-				target = 580;
+                    mazeEntryPoint = rnd(2);
+                    GOTO(580);
                     continue;
                 case 580:
-                    if (entryPoint == 1)
-						target = 940;
-					else if (entryPoint == 2)
-						target = 1090;
-					else
-						target = 590;
+                    if (mazeEntryPoint == 1)
+                        GOTO(940);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(1090);
+                    else
+                        GOTO(590);
                     continue;
                 case 590:
-				target = 940;
+                    GOTO(940);
                     continue;
                 case 600:
-                    if (yCoordinate - 1 == 0)
-						target = 790;
-					else
-						target = 610;
+                    if (s - 1 == 0)
+                        GOTO(790);
+                    else
+                        GOTO(610);
                     continue;
                 case 610:
-                    if (horizontalArray[xCoordinate][yCoordinate - 1] != 0)
-						target = 790;
-					else
-						target = 620;
+                    if (horizontalArray[r][s - 1] != 0)
+                        GOTO(790);
+                    else
+                        GOTO(620);
                     continue;
                 case 620:
-                    if (xCoordinate == horizontal)
-						target = 720;
-					else
-						target = 630;
+                    if (r == horizontal)
+                        GOTO(720);
+                    else
+                        GOTO(630);
                     continue;
                 case 630:
-                    if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
-						target = 720;
-					else
-						target = 640;
+                    if (horizontalArray[r + 1][s] != 0)
+                        GOTO(720);
+                    else
+                        GOTO(640);
                     continue;
                 case 640:
-                    if (yCoordinate != vertical)
-						target = 670;
-					else
-						target = 650;
+                    if (s != vertical)
+                        GOTO(670);
+                    else
+                        GOTO(650);
                     continue;
                 case 650:
                     if (z == 1)
-						target = 700;
-					else
-						target = 660;
+                        GOTO(700);
+                    else
+                        GOTO(660);
                     continue;
                 case 660:
                     q = 1;
-				target = 680;
+                    GOTO(680);
                     continue;
                 case 670:
-                    if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-						target = 700;
-					else
-						target = 680;
+                    if (horizontalArray[r][s + 1] != 0)
+                        GOTO(700);
+                    else
+                        GOTO(680);
                     continue;
                 case 680:
-                    entryPoint = generateRandom(3);
-				target = 690;
+                    mazeEntryPoint = rnd(3);
+                    GOTO(690);
                     continue;
                 case 690:
-                    if (entryPoint == 1)
-						target = 980;
-					else if (entryPoint == 2)
-						target = 1020;
-					else if (entryPoint == 3)
-						target = 1090;
-					else
-						target = 700;
+                    if (mazeEntryPoint == 1)
+                        GOTO(980);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(1020);
+                    else if (mazeEntryPoint == 3)
+                        GOTO(1090);
+                    else
+                        GOTO(700);
                     continue;
                 case 700:
-                    entryPoint = generateRandom(2);
-				target = 710;
+                    mazeEntryPoint = rnd(2);
+                    GOTO(710);
                     continue;
                 case 710:
-                    if (entryPoint == 1)
-						target = 980;
-					else if (entryPoint == 2)
-						target = 1020;
-					else
-						target = 720;
+                    if (mazeEntryPoint == 1)
+                        GOTO(980);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(1020);
+                    else
+                        GOTO(720);
                     continue;
                 case 720:
-                    if (yCoordinate != vertical)
-						target = 750;
-					else
-						target = 730;
+                    if (s != vertical)
+                        GOTO(750);
+                    else
+                        GOTO(730);
                     continue;
                 case 730:
                     if (z == 1)
-						target = 780;
-					else
-						target = 740;
+                        GOTO(780);
+                    else
+                        GOTO(740);
                     continue;
                 case 740:
                     q = 1;
-				target = 760;
+                    GOTO(760);
                     continue;
                 case 750:
-                    if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-						target = 780;
-					else
-						target = 760;
+                    if (horizontalArray[r][s + 1] != 0)
+                        GOTO(780);
+                    else
+                        GOTO(760);
                     continue;
                 case 760:
-                    entryPoint = generateRandom(2);
-				target = 770;
+                    mazeEntryPoint = rnd(2);
+                    GOTO(770);
                     continue;
                 case 770:
-                    if (entryPoint == 1)
-						target = 980;
-					else if (entryPoint == 2)
-						target = 1090;
-					else
-						target = 780;
+                    if (mazeEntryPoint == 1)
+                        GOTO(980);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(1090);
+                    else
+                        GOTO(780);
                     continue;
                 case 780:
-				target = 980;
+                    GOTO(980);
                     continue;
                 case 790:
-                    if (xCoordinate == horizontal)
-						target = 880;
-					else
-						target = 800;
+                    if (r == horizontal)
+                        GOTO(880);
+                    else
+                        GOTO(800);
                     continue;
                 case 800:
-                    if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
-						target = 880;
-					else
-						target = 810;
+                    if (horizontalArray[r + 1][s] != 0)
+                        GOTO(880);
+                    else
+                        GOTO(810);
                     continue;
                 case 810:
-                    if (yCoordinate != vertical)
-						target = 840;
-					else
-						target = 820;
+                    if (s != vertical)
+                        GOTO(840);
+                    else
+                        GOTO(820);
                     continue;
                 case 820:
                     if (z == 1)
-						target = 870;
-					else
-						target = 830;
+                        GOTO(870);
+                    else
+                        GOTO(830);
                     continue;
                 case 830:
                     q = 1;
-				target = 990;
+                    GOTO(990);
                     continue;
                 case 840:
-                    if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-						target = 870;
-					else
-						target = 850;
+                    if (horizontalArray[r][s + 1] != 0)
+                        GOTO(870);
+                    else
+                        GOTO(850);
                     continue;
                 case 850:
-                    entryPoint = generateRandom(2);
-				target = 860;
+                    mazeEntryPoint = rnd(2);
+                    GOTO(860);
                     continue;
                 case 860:
-                    if (entryPoint == 1)
-						target = 1020;
-					else if (entryPoint == 2)
-						target = 1090;
-					else
-						target = 870;
+                    if (mazeEntryPoint == 1)
+                        GOTO(1020);
+                    else if (mazeEntryPoint == 2)
+                        GOTO(1090);
+                    else
+                        GOTO(870);
                     continue;
                 case 870:
-				target = 1020;
+                    GOTO(1020);
                     continue;
                 case 880:
-                    if (yCoordinate != vertical)
-						target = 910;
-					else
-						target = 890;
+                    if (s != vertical)
+                        GOTO(910);
+                    else
+                        GOTO(890);
                     continue;
                 case 890:
                     if (z == 1)
-						target = 930;
-					else
-						target = 900;
+                        GOTO(930);
+                    else
+                        GOTO(900);
                     continue;
                 case 900:
                     q = 1;
-				target = 920;
+                    GOTO(920);
                     continue;
                 case 910:
-                    if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-						target = 930;
-					else
-						target = 920;
+                    if (horizontalArray[r][s + 1] != 0)
+                        GOTO(930);
+                    else
+                        GOTO(920);
                     continue;
                 case 920:
-				target = 1090;
+                    GOTO(1090);
                     continue;
                 case 930:
-				target = 1190;
+                    GOTO(1190);
                     continue;
                 case 940:
-                    horizontalArray[xCoordinate - 1][yCoordinate] = c;
-				target = 950;
+                    horizontalArray[r - 1][s] = c;
+                    GOTO(950);
                     continue;
                 case 950:
                     c++;
-                    verticalArray[xCoordinate - 1][yCoordinate] = 2;
-                    xCoordinate--;
-				target = 960;
+                    verticalArray[r - 1][s] = 2;
+                    r--;
+                    GOTO(960);
                     continue;
                 case 960:
                     if (c == horizontal * vertical + 1)
-						target = 1200;
-					else
-						target = 970;
+                        GOTO(1200);
+                    else
+                        GOTO(970);
                     continue;
                 case 970:
                     q = 0;
-				target = 270;
+                    GOTO(270);
                     continue;
                 case 980:
-                    horizontalArray[xCoordinate][yCoordinate - 1] = c;
-				target = 990;
+                    horizontalArray[r][s - 1] = c;
+                    GOTO(990);
                     continue;
                 case 990:
                     c++;
-				target = 1000;
+                    GOTO(1000);
                     continue;
                 case 1000:
-                    verticalArray[xCoordinate][yCoordinate - 1] = 1;
-                    yCoordinate--;
+                    verticalArray[r][s - 1] = 1;
+                    s--;
                     if (c == horizontal * vertical + 1)
-						target = 1200;
-					else
-						target = 1010;
+                        GOTO(1200);
+                    else
+                        GOTO(1010);
                     continue;
                 case 1010:
                     q = 0;
-				target = 270;
+                    GOTO(270);
                     continue;
                 case 1020:
-                    horizontalArray[xCoordinate + 1][yCoordinate] = c;
-				target = 1030;
+                    horizontalArray[r + 1][s] = c;
+                    GOTO(1030);
                     continue;
                 case 1030:
                     c++;
-                    if (verticalArray[xCoordinate][yCoordinate] == 0)
-						target = 1050;
-					else
-						target = 1040;
+                    if (verticalArray[r][s] == 0)
+                        GOTO(1050);
+                    else
+                        GOTO(1040);
                     continue;
                 case 1040:
-                    verticalArray[xCoordinate][yCoordinate] = 3;
-				target = 1060;
+                    verticalArray[r][s] = 3;
+                    GOTO(1060);
                     continue;
                 case 1050:
-                    verticalArray[xCoordinate][yCoordinate] = 2;
-				target = 1060;
+                    verticalArray[r][s] = 2;
+                    GOTO(1060);
                     continue;
                 case 1060:
-                    xCoordinate++;
-				target = 1070;
+                    r++;
+                    GOTO(1070);
                     continue;
                 case 1070:
                     if (c == horizontal * vertical + 1)
-						target = 1200;
-					else
-						target = 1080;
+                        GOTO(1200);
+                    else
+                        GOTO(1080);
                     continue;
                 case 1080:
-				target = 600;
+                    GOTO(600);
                     continue;
                 case 1090:
                     if (q == 1)
-						target = 1150;
-					else
-						target = 1100;
+                        GOTO(1150);
+                    else
+                        GOTO(1100);
                     continue;
                 case 1100:
-                    horizontalArray[xCoordinate][yCoordinate + 1] = c;
+                    horizontalArray[r][s + 1] = c;
                     c++;
-                    if (verticalArray[xCoordinate][yCoordinate] == 0)
-						target = 1120;
-					else
-						target = 1110;
+                    if (verticalArray[r][s] == 0)
+                        GOTO(1120);
+                    else
+                        GOTO(1110);
                     continue;
                 case 1110:
-                    verticalArray[xCoordinate][yCoordinate] = 3;
-				target = 1130;
+                    verticalArray[r][s] = 3;
+                    GOTO(1130);
                     continue;
                 case 1120:
-                    verticalArray[xCoordinate][yCoordinate] = 1;
-				target = 1130;
+                    verticalArray[r][s] = 1;
+                    GOTO(1130);
                     continue;
                 case 1130:
-                    yCoordinate++;
+                    s++;
                     if (c == vertical * horizontal + 1)
-						target = 1200;
-					else
-						target = 1140;
+                        GOTO(1200);
+                    else
+                        GOTO(1140);
                     continue;
                 case 1140:
-				target = 270;
+                    GOTO(270);
                     continue;
                 case 1150:
                     z = 1;
-				target = 1160;
+                    GOTO(1160);
                     continue;
                 case 1160:
-                    if (verticalArray[xCoordinate][yCoordinate] == 0)
-						target = 1180;
-					else
-						target = 1170;
+                    if (verticalArray[r][s] == 0)
+                        GOTO(1180);
+                    else
+                        GOTO(1170);
                     continue;
                 case 1170:
-                    verticalArray[xCoordinate][yCoordinate] = 3;
+                    verticalArray[r][s] = 3;
                     q = 0;
-				target = 1190;
+                    GOTO(1190);
                     continue;
                 case 1180:
-                    verticalArray[xCoordinate][yCoordinate] = 1;
+                    verticalArray[r][s] = 1;
                     q = 0;
-                    xCoordinate = 1;
-                    yCoordinate = 1;
-				target = 260;
+                    r = 1;
+                    s = 1;
+                    GOTO(260);
                     continue;
                 case 1190:
-				target = 210;
+                    GOTO(210);
                     continue;
                 case 1200:
                     target = -1;
@@ -615,62 +633,29 @@ public class Amazing {
 
         // 1200:
         for (int j = 1; j <= vertical; j++) {
-            drawWall(horizontal, verticalArray, j);
-            drawPath(horizontal, verticalArray, j);
+            print("I");        // 1210
+
+            for (int i = 1; i <= horizontal; i++) {
+                if (verticalArray[i][j] >= 2)
+                    print("   ");  // 1240
+                else
+                    print("  I");  // 1260
+            }
+
+            print(" ");   // 1280
+            println();
+
+            for (int i = 1; i <= horizontal; i++) {
+                if (verticalArray[i][j] == 0)
+                    print(":--");   // 1300, 1340
+                else if (verticalArray[i][j] == 2)
+                    print(":--");  // 1310, 1340
+                else
+                    print(":  "); // 1320
+            }
+
+            print(":");    // 1360
+            println();
         }
     }
-
-	private static void drawPath(int horizontal, int[][] verticalArray, int j) {
-		for (int i = 1; i <= horizontal; i++) {
-		    if (verticalArray[i][j] == 0 || verticalArray[i][j] == 2)
-		        print(":--");   // 1300, 1340
-		    else
-		        print(":  "); // 1320
-		}
-
-		print(":");    // 1360
-		println();
-	}
-
-	private static void drawWall(int horizontal, int[][] verticalArray, int j) {
-		print("I");        // 1210
-
-		for (int i = 1; i <= horizontal; i++) {
-		    if (verticalArray[i][j] >= 2)
-		        print("   ");  // 1240
-		    else
-		        print("  I");  // 1260
-		}
-
-		print(" ");   // 1280
-		println();
-	}
-
-	private static boolean isInvalidMazeDimension(int horizontal, int vertical) {
-		return horizontal == 1 || vertical == 1;
-	}
-
-	private static void printingFirstLine(int h, int x) {
-		for (int i = 1; i <= h; i++) {
-            if (i == x)
-                print(":  ");
-            else
-                print(":--");
-        }
-        // 180
-        print(":");
-        println();
-	}
-
-	private static int[][] initializeArray(int h, int v) {
-		int[][] verticalArray = new int[h + 1][v + 1];
-        initializeArray(h, v, verticalArray);
-		return verticalArray;
-	}
-
-	private static void initializeArray(int h, int v, int[][] horizontalArray) {
-		for (int i = 0; i <= h; i++) {
-            horizontalArray[i] = new int[v + 1];
-        }
-	}
 }
