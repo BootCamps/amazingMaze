@@ -198,13 +198,11 @@ public class Amazing {
 				else {
 					if (z == 1)
 						target = 940;
-					else
-						target = 550;
+					else {
+						q = 1;
+						target = 570;
+					}
 				}
-				continue;
-			case 550:
-				q = 1;
-				target = 570;
 				continue;
 			case 560:
 				if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
@@ -228,32 +226,27 @@ public class Amazing {
 			case 610:
 				if (horizontalArray[xCoordinate][yCoordinate - 1] != 0)
 					target = 790;
-				else
-					target = 620;
-				continue;
-			case 620:
-				if (xCoordinate == horizontal)
-					target = 720;
-				else
-					target = 630;
+				else {
+					if (xCoordinate == horizontal)
+						target = 720;
+					else
+						target = 630;
+
+				}
 				continue;
 			case 630:
 				if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
 					target = 720;
-				else
-					target = 640;
-				continue;
-			case 640:
-				if (yCoordinate != vertical)
-					target = 670;
-				else
-					target = 650;
-				continue;
-			case 650:
-				if (z == 1)
-					target = 700;
-				else
-					target = 660;
+				else {
+					if (yCoordinate != vertical)
+						target = 670;
+					else {
+						if (z == 1)
+							target = 700;
+						else
+							target = 660;
+					}
+				}
 				continue;
 			case 660:
 				q = 1;
@@ -311,9 +304,12 @@ public class Amazing {
 					target = 1090;
 				continue;
 			case 790:
-				if (xCoordinate == horizontal || horizontalArray[xCoordinate + 1][yCoordinate] != 0)
-					target = 880;
-				else {
+				if (xCoordinate == horizontal || horizontalArray[xCoordinate + 1][yCoordinate] != 0){
+					if (yCoordinate != vertical)
+						target = 910;
+					else
+						target = 890;
+				}else {
 					if (yCoordinate != vertical)
 						target = 840;
 					else {
@@ -340,12 +336,6 @@ public class Amazing {
 					target = 1090;
 				else
 					target = 1020;
-				continue;
-			case 880:
-				if (yCoordinate != vertical)
-					target = 910;
-				else
-					target = 890;
 				continue;
 			case 890:
 				if (z == 1)
@@ -395,19 +385,12 @@ public class Amazing {
 				continue;
 			case 990:
 				c++;
-				target = 1000;
-				continue;
-			case 1000:
 				verticalArray[xCoordinate][yCoordinate - 1] = 1;
 				yCoordinate--;
 				if (c == horizontal * vertical + 1)
 					target = -1;
 				else
-					target = 1010;
-				continue;
-			case 1010:
-				q = 0;
-				target = 270;
+					target = 970;
 				continue;
 			case 1020:
 				horizontalArray[xCoordinate + 1][yCoordinate] = c;
@@ -415,20 +398,11 @@ public class Amazing {
 				continue;
 			case 1030:
 				c++;
-				if (verticalArray[xCoordinate][yCoordinate] == 0)
-					target = 1050;
-				else
-					target = 1040;
-				continue;
-			case 1040:
-				verticalArray[xCoordinate][yCoordinate] = 3;
-				target = 1060;
-				continue;
-			case 1050:
-				verticalArray[xCoordinate][yCoordinate] = 2;
-				target = 1060;
-				continue;
-			case 1060:
+				if (verticalArray[xCoordinate][yCoordinate] == 0) {
+					verticalArray[xCoordinate][yCoordinate] = 2;
+				} else {
+					verticalArray[xCoordinate][yCoordinate] = 3;
+				}
 				xCoordinate++;
 				target = 1070;
 				continue;
@@ -439,9 +413,20 @@ public class Amazing {
 					target = 600;
 				continue;
 			case 1090:
-				if (q == 1)
-					target = 1150;
-				else {
+				if (q == 1) {
+					z = 1;
+					q = 0;
+					if (verticalArray[xCoordinate][yCoordinate] == 0) {
+						verticalArray[xCoordinate][yCoordinate] = 1;
+						xCoordinate = 1;
+						yCoordinate = 1;
+						target = 260;
+
+					} else {
+						verticalArray[xCoordinate][yCoordinate] = 3;
+						target = 210;
+					}
+				} else {
 
 					horizontalArray[xCoordinate][yCoordinate + 1] = c;
 					c++;
@@ -455,20 +440,6 @@ public class Amazing {
 						target = -1;
 					else
 						target = 270;
-				}
-				continue;
-			case 1150:
-				z = 1;
-				q = 0;
-				if (verticalArray[xCoordinate][yCoordinate] == 0) {
-					verticalArray[xCoordinate][yCoordinate] = 1;
-					xCoordinate = 1;
-					yCoordinate = 1;
-					target = 260;
-
-				} else {
-					verticalArray[xCoordinate][yCoordinate] = 3;
-					target = 210;
 				}
 				continue;
 			}
