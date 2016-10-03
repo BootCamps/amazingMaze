@@ -220,43 +220,43 @@ public class Amazing {
 			case 600:
 				if (yCoordinate - 1 == 0)
 					target = 790;
-				else
-					target = 610;
-				continue;
-			case 610:
-				if (horizontalArray[xCoordinate][yCoordinate - 1] != 0)
-					target = 790;
 				else {
-					if (xCoordinate == horizontal)
-						target = 720;
-					else
-						target = 630;
-
-				}
-				continue;
-			case 630:
-				if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
-					target = 720;
-				else {
-					if (yCoordinate != vertical)
-						target = 670;
+					if (horizontalArray[xCoordinate][yCoordinate - 1] != 0)
+						target = 790;
 					else {
-						if (z == 1)
-							target = 700;
-						else
-							target = 660;
+						if (xCoordinate == horizontal)
+							target = 720;
+						else {
+							if (horizontalArray[xCoordinate + 1][yCoordinate] != 0)
+								target = 720;
+							else {
+								if (yCoordinate != vertical) {
+									if (horizontalArray[xCoordinate][yCoordinate + 1] != 0) {
+										entryPoint = generateRandom(2);
+										if (entryPoint == 1)
+											target = 980;
+										else
+											target = 1020;
+									}
+									else
+										target = 680;
+								} else {
+									if (z == 1) {
+										entryPoint = generateRandom(2);
+										if (entryPoint == 1)
+											target = 980;
+										else
+											target = 1020;
+									}
+									else {
+										q = 1;
+										target = 680;
+									}
+								}
+							}
+						}
 					}
 				}
-				continue;
-			case 660:
-				q = 1;
-				target = 680;
-				continue;
-			case 670:
-				if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-					target = 700;
-				else
-					target = 680;
 				continue;
 			case 680:
 				entryPoint = generateRandom(3);
@@ -267,136 +267,90 @@ public class Amazing {
 				else
 					target = 1090;
 				continue;
-			case 700:
-				entryPoint = generateRandom(2);
-				if (entryPoint == 1)
-					target = 980;
-				else
-					target = 1020;
-				continue;
 			case 720:
 				if (yCoordinate != vertical)
 					target = 750;
-				else
-					target = 730;
-				continue;
-			case 730:
-				if (z == 1)
-					target = 980;
-				else
-					target = 740;
-				continue;
-			case 740:
-				q = 1;
-				target = 760;
+				else {
+					if (z == 1)
+						target = 980;
+					else {
+						q = 1;
+						entryPoint = generateRandom(2);
+						if (entryPoint == 1)
+							target = 980;
+						else
+							target = 1090;
+					}
+				}
 				continue;
 			case 750:
 				if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
 					target = 980;
-				else
-					target = 760;
-				continue;
-			case 760:
-				entryPoint = generateRandom(2);
-				if (entryPoint == 1)
-					target = 980;
-				else
-					target = 1090;
+				else {
+					entryPoint = generateRandom(2);
+					if (entryPoint == 1)
+						target = 980;
+					else
+						target = 1090;
+				}
 				continue;
 			case 790:
-				if (xCoordinate == horizontal || horizontalArray[xCoordinate + 1][yCoordinate] != 0){
+				if (xCoordinate == horizontal || horizontalArray[xCoordinate + 1][yCoordinate] != 0) {
+					if (yCoordinate != vertical) {
+						if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
+							target = 210;
+						else
+							target = 1090;
+					}
+						
+					else  {
+						if (z == 1)
+							target = 210;
+						else{
+							q = 1;
+							target = 1090;
+						}
+					}
+				} else {
 					if (yCoordinate != vertical)
-						target = 910;
-					else
-						target = 890;
-				}else {
-					if (yCoordinate != vertical)
-						target = 840;
+						if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
+							target = 1020;
+						else{
+							entryPoint = generateRandom(2);
+							if (entryPoint == 2)
+								target = 1090;
+							else
+								target = 1020;
+						}
 					else {
 						if (z == 1)
 							target = 1020;
 						else {
 							q = 1;
-							target = 990;
+							c++;
+							verticalArray[xCoordinate][yCoordinate - 1] = 1;
+							yCoordinate--;
+							q = checkExitStep(horizontal, vertical, q, c);
 						}
 					}
 				}
-
-				continue;
-
-			case 840:
-				if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-					target = 1020;
-				else
-					target = 850;
-				continue;
-			case 850:
-				entryPoint = generateRandom(2);
-				if (entryPoint == 2)
-					target = 1090;
-				else
-					target = 1020;
-				continue;
-			case 890:
-				if (z == 1)
-					target = 930;
-				else
-					target = 900;
-				continue;
-			case 900:
-				q = 1;
-				target = 920;
-				continue;
-			case 910:
-				if (horizontalArray[xCoordinate][yCoordinate + 1] != 0)
-					target = 930;
-				else
-					target = 920;
-				continue;
-			case 920:
-				target = 1090;
-				continue;
-			case 930:
-				target = 210;
 				continue;
 			case 940:
 				horizontalArray[xCoordinate - 1][yCoordinate] = c;
-				target = 950;
-				continue;
-			case 950:
 				c++;
 				verticalArray[xCoordinate - 1][yCoordinate] = 2;
 				xCoordinate--;
-				target = 960;
-				continue;
-			case 960:
-				if (c == horizontal * vertical + 1)
-					target = -1;
-				else
-					target = 970;
-				continue;
-			case 970:
-				q = 0;
-				target = 270;
+				q = checkExitStep(horizontal, vertical, q, c);
 				continue;
 			case 980:
 				horizontalArray[xCoordinate][yCoordinate - 1] = c;
-				target = 990;
-				continue;
-			case 990:
 				c++;
 				verticalArray[xCoordinate][yCoordinate - 1] = 1;
 				yCoordinate--;
-				if (c == horizontal * vertical + 1)
-					target = -1;
-				else
-					target = 970;
+				q = checkExitStep(horizontal, vertical, q, c);
 				continue;
 			case 1020:
 				horizontalArray[xCoordinate + 1][yCoordinate] = c;
-				target = 1030;
-				continue;
-			case 1030:
 				c++;
 				if (verticalArray[xCoordinate][yCoordinate] == 0) {
 					verticalArray[xCoordinate][yCoordinate] = 2;
@@ -404,9 +358,6 @@ public class Amazing {
 					verticalArray[xCoordinate][yCoordinate] = 3;
 				}
 				xCoordinate++;
-				target = 1070;
-				continue;
-			case 1070:
 				if (c == horizontal * vertical + 1)
 					target = -1;
 				else
@@ -451,6 +402,16 @@ public class Amazing {
 			drawWall(horizontal, verticalArray, j);
 			drawPath(horizontal, verticalArray, j);
 		}
+	}
+
+	private static int checkExitStep(int horizontal, int vertical, int q, int c) {
+		if (c == horizontal * vertical + 1)
+			target = -1;
+		else {
+			q = 0;
+			target = 270;
+		}
+		return q;
 	}
 
 	private static void drawPath(int horizontal, int[][] verticalArray, int j) {
